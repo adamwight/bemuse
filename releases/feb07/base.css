@@ -1,0 +1,34 @@
+/* actually, print.css */
+
+#call_list td {
+    font-family: times, serif;
+    font-size: 12pt;
+    padding: 1px;
+    margin: 0px 0px 0px 0px;
+}
+
+#call_list tr.even {
+    background: #ffffcc;
+    color: black;
+}
+
+#call_list tr.odd {
+    background: #ffeedd;
+    color: black;
+}
+
+td a {
+    color: black;
+    background: white;
+    text-decoration: none;
+}
+
+/* XXX */
+#menu.print {
+    display: none;
+}
+
+#legend {
+    clear: left;
+    text-align: right;
+}

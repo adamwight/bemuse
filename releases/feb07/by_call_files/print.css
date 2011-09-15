@@ -1,0 +1,22 @@
+#call_list tr.even {
+    background: white;
+    color: black;
+}
+
+#menu {
+    /* borken*/
+    padding: 50px;
+    display: none;
+}
+
+#title {
+    display: none;
+}
+
+#toc {
+    font-size: 9pt;
+}
+
+a {
+    color: black;
+}

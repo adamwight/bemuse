@@ -1,0 +1,43 @@
+SRCS = \
+       metacatalog.cc \
+       catalog.cc \
+       catalog_amazon.cc \
+       catalog_z3950.cc \
+       catalog_parallel.cc \
+       catalog_base.cc \
+       query.cc \
+       marc.cc \
+       book.cc \
+       isbn.cc \
+       note.cc \
+       subject.cc \
+       location.cc \
+       mysql_db.cc \
+       html_parser.cc \
+       scandata.cc \
+       scan_word.cc \
+       source.cc \
+       globals.cc \
+       net.cc
+
+OBJS = $(SRCS:.cc=.o)
+DEPENDS = .depends
+#CXXFLAGS = -I/usr/local/include -O2 -pipe
+CXXFLAGS = @CXXFLAGS@ @YAZPPINC@ -Wall -shared
+LIBS = `mysql_config --libs_r` @YAZPPLIB@ -lpthread -ldl
+CATALOGER_LIB=libcataloger.so
+
+DEST = ../web/
+
+all: build
+
+clean:
+	rm -f $(OBJS) $(DEPENDS) $(CATALOGER_LIB)
+
+build: $(OBJS) $(CATALOGER_LIB)
+
+$(CATALOGER_LIB): $(OBJS)
+	g++ -o $(CATALOGER_LIB) -Wl -shared $(LIBS) $(SRCS:.cc=.o)
+
+install: build
+#TODO

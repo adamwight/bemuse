@@ -1,0 +1,4 @@
+TESTDB="library_test"
+USER="testes"
+
+BASE="/home/adamw/projects/library"

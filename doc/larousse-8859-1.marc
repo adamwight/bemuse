@@ -1,0 +1,48 @@
+000 cam  1   
+001 NYUb10025170 
+003 NYU 
+005 19940713181853.0 
+008 780329m19719999fr       bd   00000 fre   
+010    $a    71854777//r78
+015    $a F***
+020    $c 99.50F per vol.
+035    $a (CStRLIN)NYUG0248819-B
+035    $a GLIS000251700
+040    $a DLC $c DLC $d NNU
+050  4 $a PC2625 $b .G7
+090    $i 08/28/85 CT
+245 00 $a Grand Larousse de la langue française. $c [Sous la direction de Louis Guilbert,
+       René Lagane et Georges Niobey]
+260    $a Paris, $b Larousse $c [1971-
+300    $a v. $c 27 cm.
+504    $a Bibliography: v. 1, p. xci-cxix.
+650  0 $a French language $v Dictionaries.
+700 1  $a Niobey, Georges, $e ed.
+700 1  $a Lagane, René, $e ed.
+700 1  $a Guilbert, Louis, $e ed.
+710 2  $a Larousse (Firm).
+950    $l BREF $a PC2625 $b .G7 $i 08/28/85 C $h 01/01/01 N
+950    $l BMAIN $a PC2625 $b .G7 $i 08/28/85 D $h 01/01/01 N
+955    $l BREF $c 1:v.7 $i 08/28/85 C
+955    $l BREF $c 1:v.6 $i 08/28/85 C
+955    $l BREF $c 1:v.5 $i 08/28/85 C
+955    $l BREF $c 1:v.4 $i 08/28/85 C
+955    $l BREF $c 1:v.3 $i 08/28/85 C
+955    $l BREF $c 1:v.2 $i 08/28/85 C
+955    $l BREF $c 1:v.1 $i 08/28/85 C
+955    $l BMAIN $c 1 $u v=1-7 $i 08/28/85 C
+955    $l BMAIN $c 1 $a PC2625 $b .G7 $u v=1-6 $i 08/28/85 C
+852    $a NNU $b NYU $b Bobst $b REF1 $h PC2625 $i .G7 $7 13550800 $m Non-circulating $p
+       31142035582223 $t 1 $y Available $3 v.1 $5 v.1 $c
+852    $a NNU $b NYU $b Bobst $b REF1 $h PC2625 $i .G7 $7 13550800 $m Non-circulating $p
+       31142030010261 $t 1 $y Available $3 v.2 $5 v.2 $c
+852    $a NNU $b NYU $b Bobst $b REF1 $h PC2625 $i .G7 $7 13550800 $m Non-circulating $p
+       31142030010204 $t 1 $y Available $3 v.3 $5 v.3 $c
+852    $a NNU $b NYU $b Bobst $b REF1 $h PC2625 $i .G7 $7 13550800 $m Non-circulating $p
+       31142030010147 $t 1 $y Available $3 v.4 $5 v.4 $c
+852    $a NNU $b NYU $b Bobst $b REF1 $h PC2625 $i .G7 $7 13550800 $m Non-circulating $p
+       31142030012077 $t 1 $y Available $3 v.5 $5 v.5 $c
+852    $a NNU $b NYU $b Bobst $b REF1 $h PC2625 $i .G7 $7 13550800 $m Non-circulating $p
+       31142030012135 $t 1 $y Available $3 v.6 $5 v.6 $c
+852    $a NNU $b NYU $b Bobst $b REF1 $h PC2625 $i .G7 $7 13550800 $m Non-circulating $p
+       31142030012192 $t 1 $y Available $3 v.7 $5 v.7 $c

@@ -1,0 +1,22 @@
+CXXFLAGS=`pkg-config gtk+-2.0 --cflags` -shared -I../cataloger/ -g
+LIB=`pkg-config gtk+-2.0 --libs` -L../cataloger/ -lcataloger -ldl -pthread
+#LIB=
+
+# TODO -lcataloger
+SRCS=main.cc globals.cc
+
+OBJS=$(SRCS:.cc=.o)
+
+build: prog
+
+prog: clean classifications_lc.h $(OBJS)
+	g++ -g $(LIB) $(OBJS) -o prog
+
+classifications_lc.h:
+	php class_to_C.php lc > classifications_lc.h
+
+classifications_dewey.h:
+	php class_to_C.php dewey > classifications_dewey.h
+
+clean:
+	rm -f $(OBJS) prog

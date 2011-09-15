@@ -1,0 +1,457 @@
+
+  PROPOSAL NO: 97-10
+
+DATE: May 1, 1997
+REVISED:
+
+NAME: Use of the universal code character set in MARC records
+
+SOURCE: MARBI Character Set Subcommittee
+
+SUMMARY: This proposal suggests a preferred technique for encoding MARC
+data using a repertoire of characters from the universal character set
+(ISO 10646 (UCS)) to which the existing USMARC character sets have been
+mapped.
+
+KEYWORDS: Character sets; Field 066 (Character Sets); ISO 10646;
+Linkage; Repertoire or script; Subfield $6 (in various fields); Subfield
+$b (066); UCS; Universal coded character set
+
+RELATED: 96-10 <http://lcweb.loc.gov/marc/marbi/1996/96-10.html> (May
+1996); DP 73 (December 1993)
+
+_STATUS/COMMENTS:_
+
+5/1/97 - Forwarded to USMARC Advisory Group for discussion at the June
+1997 MARBI meetings.
+
+6/28/97 - _Results of USMARC Advisory Group discussion_ - Option 1 for
+the mapping of the ASCII clones to the unified repertoire in the UCS was
+approved. The remaining changes were not approved pending the
+establishment of a follow-on technical committee to consider especially
+technical aspects for the identification of character codes used in
+records in the online environment.
+
+8/21/97 - _Result of final LC review_ - Agreed with the MARBI decision.
+
+------------------------------------------------------------------------
+
+PROPOSAL NO. 97-10: Use of the universal code character set
+
+1.  BACKGROUND
+
+For many years interest in a single universal coded character set
+to replace all other character sets has been growing.  An
+international standard set, ISO 10646 (Universal Coded Character
+Set, or, UCS) is generally accepted as a good candidate for
+eventual replacement for the 7 and 8-bit character sets now in
+use.  The library community has shared this interest in a
+universal coded character set and it first addressed the
+possibilities with USMARC in 1993.
+
+The MARBI Character Set Subcommittee was formed in June 1994 as a
+result of Discussion Paper No. 73 (UCS and USMARC Mapping).  The
+Subcommittee was asked to do the following: 1) review the
+character set issues related to mapping between the repertoires
+of the existing USMARC character sets and the universal set;
+2) formulate a proposal that covers how universal character set
+encodings might be used in USMARC records; and 3) identify other
+issues related to character sets which need to be addressed by
+MARBI and/or the library community.
+
+During the past three years the Subcommittee reached consensus on
+a mapping to the universal set for most of the characters in the
+existing USMARC sets.  It also developed preferences for dealing
+with certain mapping issues and revealed the need to add a small
+number of characters to the existing USMARC sets.  This paper
+presents those preferences and proposes a technique for encoding
+characters from the universal character set repertoire in USMARC
+records.  It also presents issues which MARBI may wish to
+investigate further.
+
+
+Mappings Completed
+
+There are currently eight graphic and two control character sets
+defined for use in USMARC records.  The graphic sets are basic
+and extended sets for the Latin, Arabic, and Cyrillic scripts, a
+basic set for the Hebrew script, and an extensive set of
+ideographic (non-alphabetic) characters for East Asian languages
+(i.e., Chinese, Japanese, and Korean, "CJK").  USMARC also
+provides a special character encoding technique for a small
+repertoire of superscript, subscript characters and three Greek
+symbols that can appear in bibliographic data.  The USMARC
+control character sets consist of a basic set with four control
+characters and an extended set with two control characters.  The
+control sets can be used with any of the graphic sets, although
+some control characters are only meaningful for certain scripts
+(e.g., joiner and nonjoiner are only used with Arabic script).
+
+The task of mapping the characters in these USMARC character sets
+to the unversal character set was carefully done following four
+working principles:
+
+    -   Round-trip mapping would be provided between USMARC
+        characters and characters in the universal set wherever
+        possible;
+
+    -   Transliteration schemes that rely on the USMARC character
+        sets would remain unchanged unless no equivalent
+        character in the universal set could be found, in which
+        case a change to the transliteration schemes might be
+        suggested to ALA and LC;
+
+    -   Modified letters (that is, letters with associated
+        diacritical marks or vocalization marks) would continue
+        to be encoded as a base-letter with an accompanying
+        combining character;
+
+    -   Character codes in the private use space of the universal
+        set would be used only if necessary to facilitate
+        round-trip mapping.
+
+The Subcommittee was able to map most of the characters in the
+existing USMARC sets to unique character code values in the
+universal set.  The mapping of these characters was approved by
+MARBI as part of Proposal 96-10 (USMARC Character Set Issues and
+Mapping to Unicode/UCS).  These mappings are available from LC's
+MARC web site at: http://www.loc.gov/marc/marc2ucs.html.  A
+mapping of the USMARC "CJK" set to universal character set codes
+is not yet available, but a subcommittee is being formed to
+consider that task.  The subcommittee will use a mapping produced
+by the Unicode Consortium as the basis for the USMARC mapping.
+
+
+2.  DISCUSSION
+
+Treatment of the ASCII Clones
+
+Round-trip mapping of a small subset of USMARC characters,
+referred to as the "ASCII clones", mostly numbers, punctuation
+marks, and special symbols shared by more than one script, was
+problematic.  MARBI was unable to reach consensus at the time
+Proposal 96-10 was discussed and the portion of the proposal
+dealing with the ASCII clones was sent back to the character set
+subcommittee for reexamination.
+
+At the February 1997 meeting of the subcommittee various options
+were considered, each of which had advantages and disadvantages
+relating to the ability to return to the original USMARC encoding
+of one of the ASCII clone characters once conversion of data to
+one of the universal character set encodings had been performed. 
+The problem is that the basic USMARC character set for each
+script includes its own set of ASCII clones.  In the universal
+set these are unified into a single repertoire of numbers,
+punctuation marks, and special symbols.  The mapping of USMARC
+characters to the universal set would be "many-to-one", making
+exact reversability back to the USMARC sets impossible, unless
+special characters were defined in the private use space.
+
+The Subcommittee was unable to reach consensus on a solution and
+has thus forwarded to MARBI the following options.  Two options
+were formulated to resolve the problem.  A description of each
+option, including advantages and disadvantages, follows.
+
+Option 1: Map USMARC ASCII clones to a unified repertoire in
+    the universal set
+
+    Advantages
+
+    1.  Mappings are to universally defined characters only, thus
+        off-the-shelf products could be used by USMARC users and
+        systems outside the USMARC community would have no
+        difficulty interpreting USMARC data.
+
+
+    2.  There would be no complications in the use of standard
+        print and display drivers designed to work with character
+        encodings from the universal set.
+
+    3.  Other data originally created using character codes from
+        the universal set is likely to use the ASCII clone
+        characters rather than character codes from the Private
+        User Space.
+
+    4.  Future databases would not be cluttered with special
+        characters which had a meaning only in an older system
+        environment.
+
+    Disadvantages
+
+    1.  The original USMARC encodings for ASCII clone characters
+        might be lost after conversion to universal character set
+        encodings unless an adequate algorithm could be developed
+        to restore the original USMARC character values.  (It has
+        been suggested that such an algorithm cannot be
+        developed.)  This problem would be particularly serious
+        for non-Latin character strings beginning with one of the
+        ASCII clone characters.
+
+    2.  The handling of bi-directional text may be more complex
+        for character strings converted back into the USMARC
+        character encodings.  Conversion and ordering of numeric
+        strings may be problematic.
+
+Option 2: Precede each ASCII clone by a script flag character
+    defined in private use space
+
+    Advantages
+
+    1.  The original USMARC character set from which the ASCII
+        clone came could be easily identified by the script flag
+        character, thus facilitating conversion back to the
+        original USMARC encoding.
+
+    2.  The handling of bi-directional text may be simpler for
+        character strings converted back into the original USMARC
+        character encodings.
+
+    3.  If later there is no need for perfect reversability, the
+        script flags could be dropped from records, leaving data
+        encoded as it would be with Option 1.
+
+    Disadvantages
+
+    1.  Records created originally within systems using one of
+        the universal sets would need to use script flag
+        characters defined in the private use space for all ASCII
+        clones or the data would be incompatible with data
+        converted from USMARC encodings.
+
+    2.  USMARC-based library systems and databases would included
+        encodings different from the standard encodings using the
+        universal sets.  This would create a "library dialect" of
+        the universal character set.
+
+
+Technique for Using Characters from the Universal Set in USMARC
+    Records
+
+The second important charge of the Character Set Subcommittee was
+to develop a technique for using characters from the universal
+coded character set in USMARC records.  The Subcommittee
+unanimously opposed the notion of mixing characters from the
+existing USMARC sets and characters from one of the universal set
+in a single USMARC record.  What remained was to develop a
+technique that would fit within the USMARC structural framework
+and accommodate the character set mappings proposed.  To fully
+understand the proposed USMARC universal character encoding
+technique, several assumptions have to be made about the
+environment.
+
+    1)  The MARC record structure (ANSI/NISO Z39.2 or ISO 2709)
+        would not change.  Records would continue to be
+        structured the way they always have been, with a
+        24-character Leader, 12-character Directory entries,
+        fixed-length and variable-length fields identified by
+        alphanumeric field tags, alphanumeric subfield codes, and
+        indicator positions in all non-control fields.
+
+    2)  For USMARC records encoded using the universal character
+        sets, a character would be defined as 16 consecutive bits
+        instead of eight.  This would allow the definition of the
+        length and address portions of the USMARC Leader and
+        Directory (which contain values that indicate character
+        counts) to remain unchanged.
+
+    3)  Encoding of letters modified by diacritics would make use
+        of the combining (non-spacing) characters, encoded
+        following the base letter with which they were
+        associated.  This would represent a change in the order
+        of encoding of combining characters which are currently
+        encoded preceding the base letter with which they are
+        associated.  NOTE: Precomposed (letter-with-diacritic)
+        characters defined in the universal character set would
+        not be allowed in USMARC.
+
+    4)  Since all scripts would be accommodated by a single
+        character set, the locking escape sequences currently
+        used in conjunction with latin and non-latin scripts in
+        USMARC records would no longer be needed and could be
+        dropped during conversion to universal character
+        encodings.  They would need to be generated during
+        conversion back to the USMARC sets.
+
+These assumptions offer various advantages to USMARC users. 
+Primary among the advantages would be that there wouldn't be
+great differences between MARC records encoded with the existing
+USMARC character sets and the universal set except for the
+character encodings themselves.  The overall structure of the
+data would not be affected.
+
+The restriction of USMARC records to either all universal
+character encodings or none would make processing of USMARC data
+easier.  The character set used in records could be identified
+systematically by the presence or absence of binary zeros as the
+first eight bits in the record.  This implicit character set
+identifier would be the result of the configuration of the first
+five characters in every MARC record.  The first five characters
+in a record indicate the record length, represent by numeric
+characters 0 through 9.  In the universal character sets, numeric
+characters 0 through 9 have binary zero as the first eight bits. 
+In the existing USMARC sets, the first eight bits are never all
+binary zero.  Binary zero is not allowed anywhere in USMARC
+records encoded using the existing 8-bit USMARC character sets. 
+Although not all universal set characters have binary zero as the
+first eight bits, this 8-bit sequence of binary zeros would
+always occur at the beginning of a recorded encoded with the
+universal character set.  It could serve as an implicit flag. 
+Recognition of this implicit flag could be designed into USMARC
+systems to handle the import of records using both old and
+new-style encodings.
+
+Identification of Repertoire or Script
+
+Since locking escape sequences would no longer be used to envoke
+character set changes in USMARC records, the use of field 066
+(Character Sets Present) needs to be examined.  The current
+configuration of field 066 is as follows:
+
+   066  Character Sets Present
+    Indicators  (both are undefined and contain blank (#))
+    Subfields
+        $a   Non-ASCII GO default character set designation  (NR)
+        $b   Non-ANSEL G1 default character set designation  (NR)
+        $c   Alternate graphic character set idntification  (R)
+
+The definition of the field could be expanded to allow the
+identification of character sets by more than an escape sequence. 
+It might also be useful to identify early in the record what
+portions of a universal character set repertoire are present in
+the record.  This could be done using new subfields in field 066;
+subfield $d (Character set identifier) and subfield $e
+(Repertoire).  These would carry codes that identify the base
+character set and the repertoires from which characters found in
+the record have been taken.  The repertoire codes could be based
+on ISO 10646 Annex A (Collections of Graphic Characters for
+Subsets) which provides a list of numeric codes for logical
+repertoires.  The new subfield for repertoire could also contain
+codes assigned to repertoires that relate to the existing USMARC
+character sets, if this would be useful or necessary.  It would
+be repeatable to identify multiple repertoires present.
+
+Example:  066  ##$ducs$e1$e7$e10
+
+    This example illustrates the identification of ISO 10646 in
+    subfield $d and codes that identify the basic Latin and
+    combining diacritical marks ("1" and "7") and Cyrillic ("10")
+    repertoires of ISO 10646 (UCS) in repetitions of subfield $e.
+
+
+3.  PROPOSED CHANGES
+
+The following is presented for consideration:
+
+    -   Treatment of ASCII clones:
+
+        Option 1: Map the USMARC ASCII clones in the Arabic,
+             Cyrillic, and Hebrew sets to the unified
+             repertoire in the universal coded character set
+             (ISO 10646)
+
+        Option 2: Same as option 1, also define script flag
+             characters for Arabic, Cyrillic, and Hebrew in
+             private use space to be used in conjunction with each
+             occurrence of an ASCII clone character in Arabic,
+             Cyrillic, and Hebrew character strings
+
+    -   Establish that USMARC records employing character codes
+        from the universal character set would use only those
+        listed in the USMARC to UCS mapping and the existence of
+        binary zeros in the first eight bits of a record will be
+        an indicator for universal character set encoding.
+
+    -   Define subfield $d (Character set) in field 066 to allow
+        for a code that indicates the universal coded character
+        set
+
+    -   Define a repeatable subfield $e (Repertoire) in field 066
+        for indicating the subset of universal characters which
+        can be expected in the MARC record.  A new USMARC list of
+        repertoire codes would be established or ISO 10646 Annex
+        A could be used.
+
+
+4.  RELATED QUESTIONS FOR FUTURE DISCUSSION
+
+The development of a proposal to allow the use of a universal
+character set in USMARC records raises questions about the
+scripts currently supported in USMARC and how non-Latin data is
+usually  represented.  At present, USMARC only supports the
+encoding of information in the "vernacular" (i.e., original
+script) for languages that use the Arabic, Cyrillic, Hebrew, and
+Latin script, or the Chinese/Japanese/Korean writing systems. 
+Currently, all other languages must be represented by
+transliterations of the vernacular script into the Latin script. 
+The availability of character repertoires in the universal
+character sets for a majority of modern writing systems (e.g.,
+Greek), not to mention plans to add repertoires of characters for
+numerous archaic writing systems (e.g., Glagolitic), allows
+USMARC to expand the approved repertoires to encompass all
+scripts.
+
+Prior to MARC, the Library of Congress and other libraries
+produced printed catalog cards which included a variety of non-
+Latin scripts.  Only with the switch to machine-readable
+cataloging records in the 70's did this vernacular cataloging
+give way to fully transliterated cataloging using only Latin
+script characters.  The switch to fully transliterated cataloging
+was intended to be temporary until technology permitted input of
+vernacular scripts.  Systems have slowly begun to offer non-Latin
+scripts.  The approval of a technique for using universal
+character set encodings suggests that this may be the time for
+MARBI to consider widening the scope of non-Latin character set
+use for USMARC.  MARBI needs to consider what other scripts might
+be usefully permitted in USMARC records, using characters from
+the universal set, and the impact of such a change.
+
+Related to the issue of non-Latin character set use in USMARC
+records is the USMARC technique for recording alternate graphic
+representations.  USMARC currently provides a technique for
+recording alternate graphic representations of cataloging data
+using repetitions of often non-repeatable variable USMARC fields. 
+Repetitions of fields such as 100, 245, and 260  are carried in
+occurrences of field 880 (Alternate Graphic Representation). 
+Alternate graphic representations in occurrences of field 880 are
+linked to Latin script transliterations in regularly tagged
+fields using subfield $6 (Linkage).  This technique has been used
+in a relatively small subset of all USMARC implementations, the
+most important of which is maintained by the Research Libraries
+Group.  RLG's RLIN database includes thousands of USMARC
+bibliographic records that include information in the original
+script linked to fully transliterated data.  This technique was
+implemented to allow for the production of vernacular records for
+systems that can handle them, and records with fully
+transliterated data for other systems.
+
+The adoption and implementation of USMARC in countries where all
+information is in one non-Latin script (e.g., Russia) has not
+required the use of 880 fields and transliterations. 
+Incompatibilities between USMARC records from, for example
+Russia, where non-Latin script data is recorded in regular
+variable fields and records (like those in RLIN) in which
+vernacular data is carried in occurrences of field 880, suggest
+that the alternate graphic representation technique may not be
+well suited for global use of USMARC.  Even internally, RLG does
+not carry alternate graphic representations in 880 fields but
+rather associates vernacular data with transliterations in
+parallel occurrences of the regular variable fields.  MARBI may
+want to consider making changes to the field 880/subfield $6
+technique.  One alternative is to use subfield $6 to identify
+repertoire/script only and use the newly-defined subfield $8
+(Field link and sequence number) to handle related
+representations of the information.
+
+
+------------------------------------------------------------------------
+/Go to:/
+
+    * List of Proposals <http://lcweb.loc.gov/marc/marbi/list-p.html>
+    * MARC Home Page <http://lcweb.loc.gov/marc/>
+    * Library of Congress Home Page <http://lcweb.loc.gov/> 
+
+------------------------------------------------------------------------
+*Library of Congress*
+Library of Congress Help Desk <http://www.loc.gov/help/help-desk.html>
+(09/02/98)
+

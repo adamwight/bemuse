@@ -1,0 +1,175 @@
+e.g. a) turn formatted biblio into a collection, and
+  b) annotate a collection with another catalog's call no's
+---------
+
+
+hidden mode for edit.php to display old source_query_id
+
+captcha edit_i
+
+shit i am breaking autoconf with <stdio> etc
+
+config test that libmysqlclient is thread_safe
+
+
+<<<<<<< /home/adamw/projects/library/notes
+reviewing a book definitely gets you a thank you page, with a
+yes button to induct you into 1/2 library
+
+---------
+
+
+=======
+ways to link reviews, eg when posted
+==
+edit or create has some login function? private are not?
+======
+
+mysqldump --skip-add-drop-table -d library | sed -e 's/AUTO_INCREMENT=[0-9]\+ //' > library.sql
+
+
+
+=======
+ways to link reviews, eg when posted
+==
+edit or create has some login function? private are not?
+======
+
+mysqldump --skip-add-drop-table -d library | sed -e 's/AUTO_INCREMENT=[0-9]\+ //' > library.sql
+
+
+
+>>>>>>> /tmp/notes~other.hGlUfo
+================
+TODO MAINTENANCE
+
+audit changes from backups and convert to an atomic format
+save changes in this format all the time.
+
+
+===========================
+AUTOCONF
+
+./configure fails mysteriously if yaz dev is not installed:
+./configure: line 3104: syntax error near unexpected token `threads,3.0.30'
+./configure: line 3104: `YAZ_INIT(threads,3.0.30)'
+
+config.status: error: cannot find input file: config.h.in
+
+split out desktop as optional build
+
+libcataloger.so would need ld.so.  just .a?
+
+====
+BUGS
+
+set location is fukt
+
+redo about: what is unique? confuse with future concepts?
+
+package as distro
+    optional php install better than scripts - platform
+    tighten security through obscurity
+    simplify and automate db privs.
+        isolate mysql?
+        user web sometimes= apache?
+        grant all privileges on library.* to 'web'@'localhost' identified by 'gronk';
+        grant all privileges on books.* to 'apache'@'localhost' identified by 'gronk';
+        grant all privileges on books.* to 'web'@'localhost' identified by 'gronk';
+    reviews retrieval code is pluggable
+    doesn't scale -- but keep this scale also.
+    make distclean vs maintainer-clean
+    libtoolize cataloger
+
+link into and across other library projects
+    including instances of self
+
+easy to switch call systems
+
+stylize
+    div menu; actions
+    center and columnize except for print media
+
+when user creates a location, keep a session var open so it don't
+disappear even without a book.
+
+lots of barf when php warnings are on
+
+indicator icon and cross-query reviews in page and maybe postcard view
+
+line views / postcard view / page view
+
+entry.php selects by query_result even if {} BAD
+
+classifications_* using $call_system is cheezy
+
+cmd_link in edit.php for r/o <-> r/w book view
+
+move get_session_value defaults (and valid re) into a table
+
+recommend a local and partial install for project gutenberg
+    ? don't understand. but do link to the text or net services?
+
+manual title edit doesn't update title_sort
+
+yaz-client catalog.library.cornell.edu:7090/VOYAGER
+
+make bibliographic lists [?]
+
+get the unused book/subject data the fuck out of O()
+
+rename classifications.php
+    get_any_location -> setup_location_please / insist / strict
+    call.php -> shelf.php
+    db:physical is not what i mean.  person-book.
+
+
+intl characters
+    research marc encoding
+<<<<<<< /home/adamw/projects/library/notes
+    0919890555
+    save marc field 066
+=======
+    save marc field 066
+>>>>>>> /tmp/notes~other.hGlUfo
+
+big red letters that an installation is in debug mode
+
+create table search_results (
+n int unsigned auto_increment,
+book_id int unsigned not null,
+
+primary key 'n'
+);
+
+ideal flow:
+    entry by isbn
+	find matches
+	display 0 or more results
+	get confirmation
+    entry by title
+
+select z.*,count(*) from book left join z_server z on z.n=book.source_id group by source_id;
+
+
+======================================================================
+TEST CASES
+
+not found:
+.C3nZC3nZC3nWChz0DhbXC3nX.cGf2.ENr7C3r1DhPZDhDWENzYD3nZ.
+.C3nZC3nZC3nWChz0DhbXC3nX.cGen.ENr7C3nZCxz0CNT0Dq.
+
+.C3nZC3nZC3nWChz0DhbXC3nX.cGen.ENr7CNz1Dxj6E3fYEG.
+.C3nZC3nZC3nWChz0DhbXC3nX.cGf2.ENr7C3n1D3DZDNT3ChzZD3zZ.
+.C3nZC3nZC3nWChz0DhbXC3nX.cGen.ENr7CNT2D3fXChbXDq.
+.C3nZC3nZC3nWChz0DhbXC3nX.cGen.ENr7C3b6DNb6ChT7EW.
+.C3nZC3nZC3nWChz0DhbXC3nX.cGf2.ENr7C3D7DxfXDhP7DxPZC3nZ.
+.C3nZC3nZC3nWChz0DhbXC3nX.cGf2.ENr7C3D7DxfXDhP6ChPZC3nZ.
+
+
+0785803955 causes a sigabrt
+
+intl characters
+
+----
+Unspam action

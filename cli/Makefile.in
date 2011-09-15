@@ -1,0 +1,54 @@
+PROG_SRCS = main.cc html_printer.cc
+
+TEST_SRCS = test.cc
+
+DEBARCODE_SRCS = debarcode.cc
+
+CHAR_CONV_SRCS = char_conv.cc test_marc.cc
+
+PROG_OBJS = $(PROG_SRCS:.cc=.o)
+TEST_OBJS = $(TEST_SRCS:.cc=.o)
+DEBARCODE_OBJS = $(DEBARCODE_SRCS:.cc=.o)
+CHAR_CONV_OBJS = $(CHAR_CONV_SRCS:.cc=.o)
+OBJS = $(PROG_OBJS) $(TEST_OBJS) $(DEBARCODE_OBJS) $(CHAR_CONV_OBJS)
+
+CATALOGER=../cataloger/
+CATALOGER_LIB=-L $(CATALOGER) -lcataloger
+DEPENDS = .depends
+#CXXFLAGS = -I/usr/local/include -O2 -pipe
+CXXFLAGS = @CXXFLAGS@ -shared -I$(CATALOGER) -I.
+LIBS = `mysql_config --libs_r` -L/usr/local/lib -lyazpp -lyaz -lzoompp -lpthread -ldl $(CATALOGER_LIB)
+PROG=prog
+
+DEST = @prefix@
+
+all: build
+
+build: prog test debarcode char_conv
+
+clean:
+	rm -f $(OBJS) prog debarcode char_conv test $(DEPENDS)
+
+depend:
+	touch $(DEPENDS)
+	makedepend -f$(DEPENDS) -I/usr/local/include -I/usr/include/g++ -I/usr/include/c++/3.3 $(SRCS)
+
+prog: $(PROG_OBJS)
+	g++ -g -o $@ $(LIBS) $(PROG_OBJS)
+
+test: $(TEST_OBJS)
+	g++ -g -o $@ $(LIBS) $(TEST_OBJS)
+
+debarcode: $(DEBARCODE_OBJS)
+	g++ -g -o $@ $(LIBS) $(DEBARCODE_OBJS)
+
+char_conv: $(CHAR_CONV_OBJS)
+	g++ -g -o $@ $(LIBS) $(CHAR_CONV_OBJS)
+
+install: build
+	install -m a+x -s $(PROG) $(DEST)
+
+
+#.if exists($(DEPENDS))
+#include "$(DEPENDS)"
+#.endif

@@ -1,0 +1,60 @@
+#!/usr/bin/perl -w
+
+use Mysql;
+
+sub listtype( $ );
+
+$fname = $ARGV[0] || "books.html";
+
+$dbh = DBI->connect( "DBI:mysql:library", "adamw", "gggronk" );
+
+open( OUT, "> $fname" ) || die "couldn't open the fucker";
+
+print OUT<<EndHTML
+<html>
+<head>
+    <title>Books</title>
+    <style TYPE="text/css">
+	td {
+	    font-family: arial, helvetica, sans-serif;
+            font-size: 8pt;
+	}
+    </style>
+</head>
+<body bgcolor=white text=black>
+<table cellspacing=0 cellpadding=0 border=0 bgcolor=black>
+<tr><td><table cellspacing=2 cellpadding=1 border=0 bgcolor=white>
+EndHTML
+;
+
+$q = "select location.description, book.title, book.author, book.call_lc "
+	  . "from physical, location, book "
+	  . "where physical.book_id=book.n and physical.location_id=location.n "
+	  . "order by call_lc, author";
+
+$sth = $dbh->prepare( $q );
+$sth->execute;
+
+#print OUT "<tr><td align=center colspan=$cols><b>$type</b></td></tr>\n";
+
+while ($row = $sth->fetchrow_arrayref())
+{
+    my $loc = $$row[0] || "?";
+    my $title = $$row[1] || "?";
+    my $author = $$row[2] || "?";
+    my $call_lc = $$row[3] || "?";
+    ($cur_topic) = ($call_lc =~ /^([a-zA-Z]+)/);
+    if (defined $last_topic and $cur_topic ne $last_topic)
+    {
+	print OUT "<tr><td colspan=4><hr></td></tr>\n";
+    }
+    $last_topic = $cur_topic;
+    print OUT "<tr><td>$call_lc</td><td>$title</td><td>$author</td><td>$loc</td></tr>\n";
+}
+
+$sth->finish;
+
+print OUT "</table></td></tr></table></body></html>\n";
+
+$dbh->disconnect;
+close OUT;

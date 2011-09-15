@@ -1,0 +1,11 @@
+PHP:
+$call_system
+$book / printer / location
+
+C++:
+cataloger
+spawns all libraries at once as arallelizedthreads , 
+generates class [lc only] from php
+
+META:
+should cut up nicely?

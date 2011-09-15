@@ -1,0 +1,122 @@
+text views of library: people/all loc <p>
+better lookup failures
+
+binder
+  lined pages for entry
+  people
+  TOC for call(s), overview toc
+  very brief statement
+  brief circ for all printed views
+
+browse
+  indicate which books have photos
+  doesn't handle call system switches right?
+
+build
+  mysql_config from Makefile
+  strip
+  versioning
+
+edit
+  ! can't save call or isbn changes
+  list source catalog
+  holding link is illogical?
+
+entry
+  save failures in queue
+  r title alone entry reports null lccn instead
+    entry lets empty authors go by in auto and manual mode
+  ! empty search gives no feedback
+      correct response is:
+	  1. this is what you typed
+	  2. want to save a placeholder?
+      it works for 1572241071!
+  ! " in title breaks something in entry and edit
+  title/author forwards to lookup page for verification, then returns
+    book can be added as already borrowed, home and lives at
+    already lent_out checkbox
+    home defaults to current location
+    lent_to can be left 1) anonymous 2) define in next page 3) define now?
+  results are stored, separate from action, so they can be re-displayed as the queue is improved (lookup too?)
+  prevent double adds from history nav with unique id
+  sublocation. popup and add button
+  popup for lent_to
+  lookup link directly after t/a entry
+  entry results come after the form, so you can add books before page load.
+  focus defaults to the type of entry used previously
+  safe-ify html (at minimum, what we save in db)
+
+general
+  empty author falls back to responsible almost everywhere: get_any_author
+  hide bad books, with a red count on many pages linking to touchup tools
+  verbosity prefs
+  reports of different perspectives for real tasks like inventory
+  disallow duplicate librarian/city
+
+instruments
+  display comments after instrument listing
+
+international
+  add a big .ru and .uk library and their call systems
+  accented characters
+  decode utf8 strings from z39.50
+
+lookup
+  score and sort by completeness, agreement
+    exact matches in their own league
+  lower priority for search threads or whatever is locking the box
+  background enhancing scanner
+      an idle task could slowly gather other country's call no's, subjects,
+      safely appending information
+  versioning
+    check that robot never contradicts a previous human decision
+    pointer to last_manual_edit
+  reject empty or duplicate Notes
+  manual entry of Notes
+  enhancement, grouping algorithm is a tree. parent nodes are composites.
+      normalize out edition, so group results with a popup of publishers and years
+  speed
+      show the first result immediately, keep top
+      display local db results immediately
+      timeout
+	  lookup should stop hounding the world once it gets 20 results or so...
+	  or a very high score, exact match
+      The title w/o author lookup in particular must be sucking resources
+      multithreaded
+	  1 per server
+	  global queue in batch mode, each catalog works through it
+  read amazon source and write get_image by isbn
+
+"librarian" login features
+  move house
+      move entire library (filtering and single-toggle possible)
+  either end can mark as lent
+  tracked with undoable events
+  location edit
+
+surface
+  bigger, different font for subject headings in (subject.php?)
+  drop .php suffixes
+  vert spacing out of people/
+  images?
+  call.php ends with the unshelved books
+  prefs
+    generic show/hide help link flips preference
+    toggle call system, help, verbosity link whenever desirable
+    librarian and session prefs, paired
+  sick summary page in "more info"
+    recent activity
+    a choice review
+  disclaimer that many entries will be inaccurate, so call.
+
+test
+  separate db for testing
+  tests are scheduled or one-off
+  entry , basic health
+  lookup to each catalog
+  unit
+    add book, with db ', get id, delete
+
+#set up library/dev
+  #qa/to do wiki
+  #add a simple bug entry page-- fuck exposing bugzilla

@@ -1,0 +1,183 @@
+#about {
+    text-align: left;
+    padding: 20px;
+    display: inline;
+    position: absolute;
+    /*float: right;*/
+}
+
+#about h3 {
+    text-align: left;
+}
+
+body {
+    background: white;
+    color: black;
+}
+
+#book.writable {
+    border: 2px solid #412d10;
+    background: #c7af8e;
+}
+
+#book:readonly {
+}
+
+#books {
+    font-family: times, serif;
+    font-size: small;
+    display: table;
+}
+
+#call_list {
+    clear: left;
+    display: table;
+    background: white;
+    color: black;
+    line-height: 1.0;
+}
+
+#call_list td {
+    font-family: times, serif;
+    font-size: 12pt;
+    padding: 1px;
+    margin: 0px 0px 0px 0px;
+}
+
+#call_list tr.even {
+    background: #ffffcc;
+    color: black;
+}
+
+#call_list tr.odd {
+    background: #ffeedd;
+    color: black;
+}
+
+/* XXX wrong */
+#call list a {
+    color: black;
+    background: white;
+    text-decoration: none;
+}
+
+/* works?*/
+.abb {
+    color: red;
+    font-family: Courier,monospace;
+}
+
+/* XXX wrong */
+#call_list h2 h3 {
+    line-height: 1.0;
+    vertical-align: bottom;
+    /*color: red;*/
+}
+
+#error {
+    background: white;
+    color: red;
+}
+
+#help {
+    font-style: italic;
+    color: blue;
+}
+
+#intro {
+    text-align: left;
+    /*vertical-align: center;*/
+    width: 400px;
+}
+
+#locations {
+    display: table;
+    font-size:large;
+}
+
+#menu {
+    padding: 10px;
+    display: block;
+    float: left;
+}
+
+/* XXX */
+#menu.print {
+    display: none;
+}
+
+#menu a {
+    color: red;
+    text-decoration: none;
+}
+
+#menu a:hover, #menu a:active {
+    color: blue;
+}
+
+#title h1 {
+    color: red;
+}
+
+#toc {
+    clear: left;
+}
+
+#toc h3 {
+    text-indent: 15px;
+    line-height: 1.0;
+}
+
+#circulation {
+    background: black;
+    padding: 8px;
+    color: #33ff33;
+    font-family: courier, mono;
+    /*width*/
+}
+
+#circulation a {
+    color: #66ff66;
+}
+
+#physical {
+    margin-left: .5in;
+}
+
+#title_link {
+   } 
+
+#legend {
+    clear: left;
+    text-align: right;
+}
+
+#batch_entry td {
+    font-family: arial, helvetica, sans-serif;
+}
+
+#report_location {
+    /*vertical-align: center;*/
+}
+
+#set_location {
+    /*display: table;*/
+    text-align: center;
+    border: 2px solid black;
+    /*vertical-align: center;*/
+    padding: 10px;
+}
+
+#subject td {
+    font-family: times, serif;
+    font-size: 12pt;
+}
+
+#subject a {
+    color: black;
+    text-decoration: none;
+}
+
+#tailnav a {
+    color: red;
+}

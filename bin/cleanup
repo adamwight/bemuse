@@ -1,0 +1,115 @@
+#!/usr/bin/perl -w
+
+use Mysql;
+use Getopt::Long;
+
+$do = 1;
+GetOptions( 'n' => sub { $do = 0 },
+	    's' => \$normalize);
+
+$dbh = DBI->connect( "DBI:mysql:library", "adamw", "gggronk" );
+
+$q = "select n,book_id,location_id from physical";
+
+$sth = $dbh->prepare( $q );
+$sth->execute;
+
+while ($row = $sth->fetchrow_arrayref())
+{
+    $q = 'SELECT * FROM location WHERE n=' . $$row[2];
+
+    $sth2 = $dbh->prepare( $q );
+    $sth2->execute();
+
+    if ($sth2->rows == 0)
+    {
+	print "physical $$row[0] refers to nonexistent location $$row[2]\n";
+	if ($do)
+	{
+	    $dbh->do( "DELETE FROM physical WHERE n=$$row[0]" );
+	}
+    }
+
+    $sth2->finish();
+
+    $q = 'SELECT * FROM book WHERE n=' . $$row[1];
+
+    $sth2 = $dbh->prepare( $q );
+    $sth2->execute();
+
+    if ($sth2->rows == 0)
+    {
+	print "physical $$row[0] refers to nonexistent book $$row[1]\n";
+	if ($do)
+	{
+	    $dbh->do( "DELETE FROM physical WHERE n=$$row[0]" );
+	}
+    }
+
+    $sth2->finish();
+}
+
+$sth->finish;
+
+$q = "SELECT n, call_lc, lc_class_number, lc_item_number, "
+	  . "title_full, title, subtitle FROM book";
+
+$sth = $dbh->prepare( $q );
+$sth->execute;
+
+while ($row = $sth->fetchrow_arrayref())
+{
+    foreach (@$row) { $_ = '' unless defined }
+
+    if (!$$row[2] && $$row[1])
+    {
+	if ($$row[1] =~ /^(.+)(\.[A-Z].*)$/)
+	{
+	    print "parsing lccn for book $$row[0]\n";
+
+	    $sql = "UPDATE book SET lc_class_number='$1', "
+				 . "lc_item_number='$2' WHERE n=$$row[0]";
+	    if ($do)
+	    {
+		$dbh->do( $sql );
+	    }
+	}
+    }
+
+    $re = "\Q$$row[6]\E *\$";
+    if (($$row[4] && !$$row[6]) || ($$row[5] =~ /$re/))
+    {
+	if ($$row[5] =~ /^(.+?) *[:;] *(.+)$/)
+	{
+	    ($title, $subtitle) = ($1, $2);
+	}
+	elsif ($$row[4] =~ /^(.+?) *[:;] *(.+)$/)
+	{
+	    ($title, $subtitle) = ($1, $2);
+	}
+	else
+	{
+	    next;
+	}
+
+	print "parsing title for book $$row[0]\n";
+
+	$sql = "UPDATE book SET title=" . $dbh->quote($title) . ", "
+			     . "subtitle=" . $dbh->quote($subtitle) . " "
+		    . "WHERE n=$$row[0]";
+	if ($do)
+	{
+	    $dbh->do( $sql );
+	}
+    }
+
+    if ($do && $normalize)
+    {
+	print "normalizing book $$row[0]\n";
+	system( "./prog --standard $$row[0]" );
+    }
+}
+
+$sth->finish;
+
+$dbh->disconnect;

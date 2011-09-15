@@ -1,0 +1,449 @@
+
+      /MARC 21 Specifications for Record Structure,
+      Character Sets, and Exchange Media/
+
+
+      CHARACTER SETS: Part 1
+
+
+    MARC-8 Environment
+
+January 2000
+------------------------------------------------------------------------
+CONTENTS
+Introduction <#intro> | Implementation <#implement> | Control Function
+Sets <#control>
+Graphic Character Sets <#graph> | Nonspacing Graphic Characters
+(Diacritics) <#nonspace>
+Accessing Alternate Graphic Character Sets <#alt>
+Field Orientation <#field> | Fill Character <#fill> | Character Set
+Subsets <#subset>
+------------------------------------------------------------------------
+
+
+      INTRODUCTION
+
+MARC 21 records in the MARC-8 environment are encoded according to the
+specifications below. All characters are 8-bit per character or 24-bit
+per character (Chinese, Japanese and Korean). Different sets of
+characters are accessed via escape sequences.
+
+
+        MARC-8 Markers
+
+In the MARC 21 record, Leader character position 9 contains the value
+blank (ASCII 20(hex)) if the record is encoded using MARC-8 sets. Field
+066 is also used to indicate the MARC-8 sets in the record other than
+the default sets.
+
+------------------------------------------------------------------------
+
+
+      IMPLEMENTATION
+
+The MARC-8 coded character set is 8-bit. The individual characters are
+commonly referred to by hexadecimal notation. The hex codes for
+characters may be determined from the code matrix column number and row
+number. For instance, the SPACE character, which is expressed in binary
+notation as 00100000, is expressed in hexadecimal notation as 20, (also
+written as 20(hex)).
+
+There are control characters defined in ASCII that are not used in a
+MARC 21 communications record (e.g., null, ASCII 00(hex)). There are
+also spacing graphic characters in ASCII which closely resemble
+nonspacing combining characters in ANSEL (i.e., spacing circumflex
+(ASCII 3E(hex)), spacing underscore (ASCII 5F(hex)), spacing grave
+(ASCII 60(hex)), and spacing tilde (ASCII 7E(hex))). In MARC 21 records,
+the use of the spacing ASCII diacritical marks is limited to situations
+where the intent is not to represent a letter-with-diacritic
+combination, e.g., the encoding of file names, etc.
+
+An 8-bit coded character set accommodates two sets of 32 control
+functions (C0 and C1), two sets of 94 graphic characters (G0 and G1), a
+SPACE character, a DELETE character, and two reserved character
+positions (see /Figure/). The C0 and C1 control functions, and the SPACE
+character can be accessed at anytime as they are not affected by the
+designation and invocation of different graphic sets.
+
+* Figure: 8-bit Code Matrix *
+
+8-bit Code Matrix
+
+Graphic character sets may be represented by either 8 bits per
+character, or, where a larger number of characters needs to be
+accommodated by the character set, by more than 8 bits codes per
+character (usually in multiples of 8).
+
+According to /Code Extension Techniques for Use with 7-bit and 8-bit
+Character Sets/ (ANSI X3.41), the general technique for the use of code
+sets requires first the * designation * of the sets, then the *
+invocation * of a designated set as the * working * set. For 8-bit
+codes, two sets of control functions and four graphic character sets may
+be designated at any given time. The designated sets of control
+functions are called the C0 and C1 sets. The designated sets of graphic
+characters are called the G0, G1, G2, and G3 sets. Two Cn and two Gn
+sets may be in an invoked, working set status at any given time. If, for
+example, a specific character set is designated as the G0 set and
+invoked as the working set, in order to change a working set either
+another character set must be designated as the G0 set, or another
+character set must be designated as set G1, G2 or G3 and that set
+invoked as a working set. The following sections specify the designation
+and invocation of code sets in MARC 21.
+
+Go to top of document <#top>
+
+------------------------------------------------------------------------
+
+
+      CONTROL FUNCTION SETS
+
+The C0 and C1 control function sets are fixed for MARC 21. They are thus
+designated and invoked by default and need not be designated and invoked
+in the record.
+
+The C0 set is the set of 32 control functions defined in ASCII. They
+occupy codes 00(hex) through 1F(hex) at all times. This set contains
+basic control characters, of which only four characters may be used in
+MARC 21 records. These four characters are the escape character
+(1B(hex)), subfield delimiter (1F(hex)), field terminator (1E(hex)), and
+record terminator (1D(hex)). The C1 set is another set of 32 possible
+control characters which occupy codes 80(hex) through 9F(hex) at all
+times. There are four control character currently defined for use in
+MARC 21 records: non-sorting character(s) begin, 88(hex); non-sorting
+character(s) end, 89(hex); joiner 8D(hex); and nonjoiner 8E(hex). The
+latter two control characters are used to control the environment of
+graphic characters whose proximity to other characters affects their
+processing. Specifications for use of the non-sorting characters are
+contained in the MARC 21 bibliographic format. As of July 1999 the rules
+for use were not yet completely decided. When they are, they will be
+published in the format and be available from the MARC web site (
+www.loc.gov/marc/ <http://www.loc.gov/marc/>).
+
+Go to top of document <#top>
+
+------------------------------------------------------------------------
+
+
+      GRAPHIC CHARACTER SETS
+
+ASCII graphics are the default G0 set and ANSEL graphics are the default
+G1 set for MARC 21 records. ASCII graphics are invoked as the working
+set for codes 21(hex) through 7E(hex). ANSEL, a graphic character set of
+nonspacing and spacing marks and special signs, is designated as the
+graphic G1 set, invoked as the working set for codes A1(hex) through
+FE(hex). These are the default working sets for data transcribed in the
+fields and subfields unless other default sets are specified in the
+record field 066 (Character Sets Present). Additional graphic character
+sets may also be accessed using special techniques. Upon exit from a
+subfield, ASCII must be designated the G0 set.
+
+There are two special characters positions in every "G" code block
+(e.g., G0) assigned to graphic characters; one at the beginning (20(hex)
+or A0(hex) in an 8-bit environment) and one at the end (7F(hex) or
+FF(hex) in an 8-bit environment). The space character, which is
+interpreted both as a /graphic character/ and as a /control character/,
+occupies 20 (hex). In MARC 21 records it is used in indicators, coded
+data elements, and variable fields. This /character/ is also referred to
+as "blank" in MARC 21 documentation. The /delete/ character occupies the
+second of the two special character positions. It is a /control
+character/ that is not used in MARC 21 records.
+
+Go to top of document <#top>
+
+------------------------------------------------------------------------
+
+
+      NONSPACING GRAPHIC CHARACTERS (DIACRITICS)
+
+Nonspacing graphic characters are always used in conjunction with other
+spacing graphic characters. More than one nonspacing graphic character
+may be associated with one spacing graphic character. MARC 21 does not
+use the ASCII spacing equivalents of the ANSEL nonspacing graphic
+characters to encode diacritical marks associated with alphabetic
+characters. The nonspacing graphic characters that are used in
+conjunction with ASCII spacing graphic characters appear in the ANSEL
+character set in columns E-F (8-bit, G1 set). In the Arabic character
+set, nonspacing characters appear in columns 4-7, and F (8-bit set). In
+the Greek set, nonspacing characters appear in column 2. In the Hebrew
+character set, nonspacing characters appear in column 4 (8-bit, G0 set).
+In a character string, these nonspacing characters precede the character
+that they modify. When a graphic character requires multiple character
+modifiers, they are entered in the order in which they appear, reading
+left to right (or right to left with right-to-left scripts) and top to
+bottom.
+
+Go to top of document <#top>
+
+------------------------------------------------------------------------
+
+
+      ACCESSING ALTERNATE GRAPHIC CHARACTER SETS
+
+There are currently two techniques established in MARC 21 to access an
+alternate graphic character set. One way is a special technique for
+accessing a small number of characters; the other involves using
+standard escape sequences to access any well defined character set.
+Below is an explanation of these two techniques.
+
+------------------------------------------------------------------------
+
+
+        Technique 1: Greek Symbols, Subscript, and Superscript Characters
+
+Three Greek symbols (alpha, beta, and gamma), fourteen subscript
+characters, and fourteen superscript characters have been placed in
+three separate character sets that are accessed by a locking escape
+sequence. The technique for accessing these characters is outside the
+framework specified in ANSI X3.41 or ISO 2022. These three special sets
+are designated as G0 sets in codes 21(hex) through 7E(hex) by means of a
+two-character sequence consisting of the /Escape/ character and an ASCII
+/graphic character/. The specific escape sequences for the three special
+sets are:
+
+      ESCg (ASCII 1B(hex) 67(hex)) for the Greek symbol set
+      ESCb (ASCII 1B(hex) 62(hex)) for the Subscript set
+      ESCp (ASCII 1B(hex) 70(hex)) for the Superscript set
+
+When one of these character sets is designated using the escape
+sequence, the escape is locking which means that all characters
+following the escape sequence are interpreted as being part of the newly
+designated character set until another escape sequence is encountered.
+This follow-on escape sequence may redesignate ASCII or designate
+another special character set as the G0 set. To redesignate ASCII, the
+following two-character escape sequence is used:
+
+      ESCs (ASCII 1B(hex) 73(hex)) for ASCII default character set
+
+------------------------------------------------------------------------
+
+
+        Technique 2: Other Alternate Graphic Character Sets
+
+All other alternate graphic character sets should be designated and
+invoked in accordance with ANSI X3.41, /Code Extension Techniques for
+Use with 7-bit and 8-bit Character Sets /or its international
+counterpart ISO 2022. At the present time, additional sets are accessed
+through designation as either G0 (codes 21(hex) through 7E(hex)) or G1
+(codes A1(hex) through FE(hex)). Alternate graphic character sets are
+designated by means of a multiple character escape sequence consisting
+of the ESCAPE character, an Intermediate character sequence, and a Final
+character sequence in the form ESC I F, where:
+
+    * ESC is the ESCAPE character (ASCII 1B(hex)).
+
+    * I is the Intermediate character sequence, which may be one or more
+      characters in length and indicates whether the set is designated
+      as the G0 set or the G1 set and whether the set has one byte or
+      multiple bytes per character. The following values may be used for
+      the Intermediate character sequence:
+
+      _To designate as the G0 set:_
+
+            For a set with one byte per character
+                  I = 28(hex) [ASCII graphic: ( ]
+                  or I = 2C(hex) [ASCII graphic: , ].
+
+            For a set with multiple bytes per character
+
+                  I = 24(hex) [ASCII graphic: $ ]
+                  or I = 24(hex) 2C(hex) [ASCII graphics: $ , ].
+
+      _To designate as the G1 set:_
+
+            For a set with one byte per character
+                  I = 29(hex) [ASCII graphic: ) ]
+                  or I = 2D(hex) [ASCII graphic: - ].
+            For a set with multiple bytes per character
+                  I = 24(hex) 29(hex) [ASCII graphics: $ ) ]
+                  or I = 24(hex) 2D(hex) [ASCII graphics: $ - ].
+
+    * F is the Final character in the escape sequence, which identifies
+      the graphic character set being designated. The codes for Final
+      characters are assigned by the registration authority of the
+      International Organization for Standardization (ISO) for many
+      sets. These sets are assigned codes in the range 40(hex) through
+      7E(hex); other character sets intended for local use may be
+      assigned a code outside this range. The Final characters for
+      alternate graphic character sets approved for use in MARC 21 are
+      the following:
+            33(hex) [ASCII graphic: 3] = Basic Arabic
+            34(hex) [ASCII graphic: 4] = Extended Arabic
+            42(hex) [ASCII graphic: B] = Basic Latin (ASCII)
+            21 45(hex) [ASCII graphic: !E] = Extended Latin (ANSEL)
+            31(hex) [ASCII graphic: 1] = Chinese, Japanese, Korean (EACC)
+            4E(hex) [ASCII graphic: N] = Basic Cyrillic
+            51(hex) [ASCII graphic: Q] = Extended Cyrillic
+            53(hex) [ASCII graphic: S] = Basic Greek
+            32(hex) [ASCII graphic: 2] = Basic Hebrew
+
+Whenever alternate graphic character sets accessed using Technique 2 are
+used in a MARC 21 bibliographic record, field 066 (Character Sets
+Present) must appear in the record. The alternate graphic character sets
+are identified in subfield $c of field 066 to assist machine processing.
+[See /MARC 21 Format for Bibliographic Data/.]
+
+------------------------------------------------------------------------
+
+
+        Use and Placement of Escape Sequences
+
+Escape sequences to designate alternate graphic character sets may occur
+wherever the alternate characters are needed, e.g., within a word, at
+the beginning of a subfield, or in the middle of a subfield. However,
+the escape sequence never replaces a space.
+
+Escape sequences are locking. The alternate graphic character set
+remains designated as the Gn set until another graphic character set is
+designated. If the ASCII graphics have been displaced as the G0 set
+within a subfield, ASCII graphics must be designated as the G0 set
+before subfield delimiters and field terminators. Some alternate
+character sets include separately defined marks of punctuation that
+duplicate those defined in ASCII. They may be used when the alternate
+graphics are used.
+
+Example:
+Alternate Graphics Example
+
+      E = ESCAPE character
+      ( = set is designated as the G0 set and has one byte per character
+      N = Basic Cyrillic character set
+      B = ASCII default character set 
+
+When the text of a field which has an indicator for nonfiling characters
+begins with an escape sequence, the bytes in the escape sequence are not
+included in the count of nonfiling characters.
+
+Go to top of document <#top>
+
+------------------------------------------------------------------------
+
+
+      FIELD ORIENTATION
+
+The contents of a field in a MARC 21 record are always recorded in their
+logical order, from the first character to the last, regardless of field
+orientation. When data in a subfield is written in a right-to-left
+script (Hebrew or Arabic), the subfield pair is followed by the escape
+sequence which invokes the character set for the script and then
+immediately by the first character of the text (i.e., exactly the same
+as for text in a left-to-right script). The first character of text in a
+right-to-left script does not occur at the end of the field just before
+the field terminator.
+
+Example: /(Order of data in MARC record)/ Field Orientation Example
+
+Example: /(Order of data as it might be displayed)/ Field Orientation
+Example
+
+      E = ESCAPE character
+      ( = set is to be designated as the G0 set and has one byte per
+      character
+      2 = Hebrew character set
+      B = ASCII default character set
+
+There may be one exception to logical order for data in the MARC-8
+environment, numbers in the Arabic and Hebrew character sets. Several
+options for encoding digits in Arabic or Hebrew text exist in the MARC-8
+environment. Digits occur in the Basic Latin (ASCII) set (numbers
+written as 1, 2, etc.), the Hebrew set (numbers written as 1, 2, etc.),
+and the Arabic set (numbers written in the traditional "Hindi" form).
+Multi-digit numbers in Hebrew or Arabic script fields encoded using the
+Basic Latin set are always input in logical order. Those encoded using
+the digits in the Arabic or Hebrew sets may have been input in visual
+order, depending on the implementation. Users may choose to use the
+Basic Latin or the Hebrew and Arabic encodings.
+
+Left-to-right /field orientation/ is the default for fields in MARC 21
+records. No special designation of field orientation is required for
+character sets with left-to-right orientation. When a field contains
+data whose orientation is from right to left, orientation is indicated
+with a field orientation code appended to subfield $6 (Linkage). [See
+/MARC 21 Format for Bibliographic Data/, Appendix A, subfield $6.]
+
+The decision to designate the field orientation as right-to-left depends
+on the predominance of data in a script that is read right-to-left at
+the field and/or the record level. A field may contain a mixture of
+scripts. Right-to-left field orientation is usually designated in the
+following instances:
+
+      - when a field contains only or mostly data in a right-to-left script
+      - when a field contains data in both a right-to-left and a
+      left-to-right script, but the preponderance of data in other
+      fields is right-to-left
+      - in order to maintain consistency among fields constituting the
+      "body" of a bibliographic entry (2XX, 3XX, and 4XX fields)
+
+Go to top of document <#top>
+
+------------------------------------------------------------------------
+
+
+      FILL CHARACTER
+
+The key to retaining the MARC structure, while simultaneously reducing
+required coding specificity, is the fill character. For MARC 21 records,
+the use of this fill character is limited to variable control fields
+such as field 008 (Fixed-Length Data Elements). It may not be used in
+the leader or in tags, indicators, or subfield codes. Presence of a fill
+character in a variable control field indicates that the creator of the
+record has not attempted to supply a value. In contrast, use of a code
+value for "unknown" in a variable control field indicates that the
+creator of the record has attempted to supply a value, but was unable to
+determine what the appropriate value should be. The fill character may
+be used in undefined character positions and in character positions for
+which the MARC 21 format defines one or more values. Use of the fill
+character in variable control fields is usually regulated by the policy
+of the inputting agency.
+
+For communication purposes, the fill character is represented by the
+code 7C(hex) in the expanded 8-bit ASCII character set. The fill
+character is represented graphically as the vertical bar ( | ).
+
+Go to top of document <#top>
+
+------------------------------------------------------------------------
+
+
+      CHARACTER SET SUBSETS
+
+In MARC 21 documents, character set subsets are specified by the
+following names with the definition indicated:
+
+* ASCII numerics: *
+    Graphic repertoire and encoding found in ASCII positions
+    30(hex)through 39(hex).
+* ASCII uppercase alphabetics: *
+    Graphic repertoire and encoding found in ASCII positions 41(hex)
+    through 4F(hex) and 50(hex) through 5A(hex).
+* ASCII lowercase alphabetics: *
+    Graphic repertoire and encoding found in ASCII positions 61(hex)
+    through 6F(hex) and 70(hex) through 7A(hex).
+* ASCII graphic symbols: *
+    Graphic repertoire and encoding found in ASCII positions 20(hex)
+    through 2F(hex), 3A(hex) through 3F(hex), 40(hex), 5B(hex) through
+    5F(hex), 60(hex), and 7B(hex) through 7E(hex), which includes all
+    ASCII characters other than numerics, alphabetics and delete.
+* ASCII graphics: *
+    All ASCII characters (including numerics, alphabetics and graphic
+    symbols) found in positions 20(hex) through 7E(hex).
+* ASCII blank: *
+    Graphic character in ASCII position 20(hex).
+* MARC 21 repertoire: *
+    All characters defined in this document and other character set
+    documentation specified for use in MARC 21, whether encoded using
+    MARC-8 or UCS/Unicode encodings.
+
+Go to top of document <#top>
+
+------------------------------------------------------------------------
+
+*Go to:* /MARC 21 Specifications/
+<http://www.loc.gov/marc/specifications/spechome.html> | MARC Home Page
+<http://www.loc.gov/marc/> | Library of Congress Home Page
+<http://www.loc.gov/>
+
+------------------------------------------------------------------------
+Library of Congress *Library of Congress*
+Library of Congress Help Desk <http://www.loc.gov/help/help-desk.html> (
+10/28/2002 )
+

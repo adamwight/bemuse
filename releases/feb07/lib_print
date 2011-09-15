@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rm call_files/avail.png
+psmerge call.ps > merged.ps
+psbook -s4 merged.ps > paged.ps

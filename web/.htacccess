@@ -1,0 +1,3 @@
+<Directory /home/adamw/projects/library/web>
+  Order Deny,Allow
+</Directory>
