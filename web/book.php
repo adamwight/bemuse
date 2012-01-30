@@ -179,7 +179,7 @@ class book_printer
         echo "</div>";
     }
 
-    function get_books($where, $q_suffix = NULL)
+    function list_books($where, $q_suffix = NULL)
     {
 	global $call_column, $with_circulation;
 
@@ -201,8 +201,8 @@ class book_printer
 	while ($book = mysql_fetch_assoc($result))
 	{
             //XXX streaming print
-	    //$this->print_book(new physical($book, $book['location_id']));
-	    $out[] = new physical($book, $book['location_id']));
+	    $this->print_book(new physical($book, $book['location_id']));
+	    //$out[] = new physical($book, $book['location_id']);
 	}
         return $out;
     }

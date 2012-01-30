@@ -1,6 +1,6 @@
 <?
-mysql_connect( "localhost", "web", "gronk" );
-mysql_select_db( "library" );
+mysql_connect( "localhost", "halfway", "barz on q" );
+mysql_select_db( "halfway" );
 mysql_set_charset("utf8");
 
 $exec_path = '/www/library/prog';

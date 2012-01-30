@@ -1,5 +1,4 @@
 <?
-phpinfo();
 if (!isset($GLOBALS['_SESSION']))
     session_start();
 
