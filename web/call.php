@@ -68,7 +68,7 @@ function print_legend()
 
 function list_by_call()
 {
-    global $call_column, $publicity_expr;
+    global $call_column, $publicity_expr, $library;
 
 $sql = "SELECT b.n, b.title_full, b.author, b.responsible, b.$call_column, "
             . "GROUP_CONCAT(DISTINCT l.n SEPARATOR ',') AS location_id, "
