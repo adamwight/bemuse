@@ -131,10 +131,10 @@ function list_instruments($where)
     $sql = "SELECT n, type, brand, year FROM instrument WHERE $where ORDER BY type";
     $result = db_query($sql);
 
-    if (mysql_num_rows($result))
+    if ($result->rowCount())
 	echo "<h2>Instruments</h2>";
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
        $type = htmlspecialchars( $row[1] );
        $instrument = "<u><a href=\"edit_i.php?i=$row[0]\">"
@@ -170,9 +170,10 @@ function delete_image($image_id, $obj_id, $type)
 
     list ($id) = sscanf($image_id, "%d");
 
-    $sql = "UPDATE image SET ${type}_id=-$obj_id "
-		. "WHERE n=$id AND ${type}_id=$obj_id";
+    $sql = "UPDATE image SET ?=? "
+		. "WHERE n=? AND ?=?";
 
-    db_query( $sql );
+    $column = "{$type}_id";
+    db_query($sql, $column, 0-$obj_id, $id, $column, $obj_id);
 }
 ?>

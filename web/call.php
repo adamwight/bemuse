@@ -124,7 +124,7 @@ function print_results_by_subject($result)
     $even_row = 0;
     //$last_topic = NULL;
 
-    while ($row = mysql_fetch_assoc( $result ))
+    while ($row = $result->fetch())
     {
 	$shelf_label = $call_system->get_shelf_label_if_seq($row[$call_column]);
 

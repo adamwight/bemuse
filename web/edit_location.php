@@ -103,13 +103,12 @@ function parse_location()
     }
     elseif ($manual_data)
     {
-	$sql = "INSERT INTO location SET city      = '$city', "
-				      . "librarian = '$librarian', "
-				      . "contact   = '$contact'";
-	mysql_query( $sql );
-	echo mysql_error();
+	$sql = "INSERT INTO location SET city      = ?, "
+				      . "librarian = ?, "
+				      . "contact   = ?";
+	db_query( $sql, ?, ?, ? );
 
-	$location_id = mysql_insert_id();
+	$location_id = PDO::lastInsertId();
 	$_SESSION['l'] = $location_id;
     }
     else

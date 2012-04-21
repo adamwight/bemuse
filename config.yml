@@ -1,0 +1,23 @@
+db:
+    driver: mysql
+    host: localhost
+    dbname: halfway
+    user: myuser
+    password: mypass
+
+debug: false
+
+exec_path: /www/halfway-dev/prog
+
+# used to set specific_locations_only:, local_only
+#main_scope: *
+# TODO should be set per-perspective
+main_title: The Halfway Library
+max_favorites: 10
+
+default_call_system: lc
+#as_column
+#with_incomplete
+#divide_topics
+#highlight_accessible
+#minimum_publicity

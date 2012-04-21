@@ -39,6 +39,7 @@ if ($book_id)
     $sql = "INSERT INTO image SET book_id=$book_id, "
 	 . "mime='" . $size['mime'] . "', attr='$size[3]', "
 	 . "data='$escaped'";
+    db_query( $sql );
     header( "Location: edit.php?b=$book_id" );
 }
 elseif ($location_id)
@@ -46,6 +47,7 @@ elseif ($location_id)
     $sql = "INSERT INTO image SET location_id=$location_id, "
 	 . "mime='" . $size['mime'] . "', attr='$size[3]', "
 	 . "data='$escaped'";
+    db_query( $sql );
     header( "Location: browse.php?l=$location_id" );
 }
 elseif ($instrument_id)
@@ -53,8 +55,7 @@ elseif ($instrument_id)
     $sql = "INSERT INTO image SET instrument_id=$instrument_id, "
 	 . "mime='" . $size['mime'] . "', attr='$size[3]', "
 	 . "data='$escaped'";
+    db_query( $sql );
     header( "Location: edit_i.php?i=$instrument_id" ); //XXX
 }
-
-db_query( $sql );
 ?>

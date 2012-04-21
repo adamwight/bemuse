@@ -24,7 +24,7 @@ function print_toc()
 
     $result = db_query( $sql );
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
 	print_heading_verbose_link($row[0]);
     }

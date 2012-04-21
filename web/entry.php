@@ -231,8 +231,8 @@ function add_book( $id )
 
     if (!$id) return;
 
-    $sql = "INSERT INTO physical SET book_id=$id, location_id=$location, home_location=$location";
-    db_query( $sql );
+    $sql = "INSERT INTO physical SET book_id=?, location_id=?, home_location=?";
+    db_query( $sql, $id, $location, $location );
 
     $added[] = $id;
 }
@@ -267,8 +267,8 @@ function set_book_author( $id, $author )
 {
     global $debug;
 
-    $sql = "UPDATE book SET author='$author' WHERE n='$id'";
-    db_query( $sql );
+    $sql = "UPDATE book SET author=? WHERE n=?";
+    db_query( $sql, $author, $id );
 }
 
 function print_help()

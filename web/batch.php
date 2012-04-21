@@ -134,8 +134,8 @@ function process_titles()
 		continue;
 	    }
 
-	    $sql = "UPDATE book SET author='$author' WHERE n=$book_id";
-	    db_query( $sql );
+	    $sql = "UPDATE book SET author=? WHERE n=?";
+	    db_query( $sql, $author, $book_id );
 
 	    echo "recorded author `$author' ",
 		 "<a target=\"_blank\" href=\"edit.php?v=.&b=$book_id\">",
@@ -281,14 +281,14 @@ function print_book_results( $out, $type, $arg )
 
     $sql = "SELECT b.n, b.title, b.author, p.physical_id " .
 	        "FROM book b LEFT JOIN physical p ON " .
-		"(p.book_id=b.n and p.location_id=$location) " .
-		"WHERE b.n IN (" . $out[1] . ") GROUP BY b.n";
+		"(p.book_id=b.n and p.location_id=?) " .
+		"WHERE b.n IN (?) GROUP BY b.n";
 
-    $result = db_query( $sql );
+    $result = db_query($sql, $location, $out[1]);
 
     if ($n_results == 1)
     {
-	$row = mysql_fetch_row( $result );
+	$row = $result->fetch();
 	$book_h = "<u>$row[1]</u> by $row[2]";
 
 	if ($row[3])
@@ -306,7 +306,7 @@ function print_book_results( $out, $type, $arg )
     {
 	echo "<dl><dt>Multiple results for $type $arg:<br>\n<dd>";
 
-	while ($row = mysql_fetch_row( $result ))
+	while ($row = $result->fetch())
 	{
 	    echo "<input type=radio name=\"$type-$arg\" value=$row[0]>";
 	    echo "<u>$row[1]</u> by $row[2]<br>";

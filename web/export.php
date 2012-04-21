@@ -13,15 +13,14 @@ if ($_POST['location'])
     $locations = join( ',', $locs );
 
     $sql = "SELECT location.*,COUNT(*) AS count FROM location, physical "
-	 . "WHERE location.n IN ($locations) "
+	 . "WHERE location.n IN (?) "
 	 . "AND location.n=physical.location_id GROUP BY location_id";
 
-    $result = mysql_query( $sql );
-    echo mysql_error();
+    $result = db_query( $sql, $locations );
 
     echo "flat file format v1.0\n\n";
     echo "locations:\n";
-    while ($row = mysql_fetch_assoc( $result ))
+    while ($row = $result->fetch())
     {
 	echo $row['n'] . ": " . $row['city'] . " (" . $row['count'] . " books)\n";
 	echo "    l: " . $row['librarian'] . "\n";
@@ -32,14 +31,13 @@ if ($_POST['location'])
     $sql = "SELECT book.*, physical.location_id, location.city "
 	  . "FROM physical, location, book "
 	  . "WHERE physical.book_id=book.n "
-	  . "AND physical.location_id in ($locations) "
+	  . "AND physical.location_id in (?) "
 	  . "AND physical.location_id = location.n "
 	  . "ORDER BY location.n,book.n";
 
-    $result = mysql_query( $sql );
-    echo mysql_error();
+    $result = db_query( $sql, $locations );
 
-    while ($row = mysql_fetch_assoc( $result ))
+    while ($row = $result->fetch())
     {
 	echo "t: " . $row['title'] . "\n";
 	echo "a: " . $row['author'] . "\n";
@@ -61,10 +59,9 @@ Use <kbd>&lt;control&gt;</kbd> or <kbd>&lt;shift&gt;</kbd> keys to select multip
 <select name=location multiple>
 <?
     $sql = "SELECT n,city FROM location";
-    $result = mysql_query( $sql );
-    echo mysql_error();
+    $result = db_query( $sql );
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
 	echo "<option value=$row[0]>$row[1]</option>\n";
     }

@@ -34,10 +34,9 @@ $sql = "SELECT title, author, isbn, book.n "
 	  . "FROM book, physical WHERE physical.book_id=book.n $where "
 	  . "GROUP BY book.n ORDER BY title_sort, author";
 
-$result = mysql_query( $sql );
-echo mysql_error();
+$result = db_query($sql);
 
-while ($row = mysql_fetch_row( $result ))
+while ($row = $result->fetch())
 {
     $title = ($row[0] ? $row[0] : '&nbsp;');
     $author = ($row[1] ? $row[1] : '&nbsp;');

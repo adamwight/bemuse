@@ -17,10 +17,7 @@ function load_books($where)
     // sort by score
     $result = db_query($sql);
 
-    $book_array = array();
-    while ($row = mysql_fetch_assoc( $result ))
-	$book_array[] = new book($row);
-    return $book_array;
+    return $result->fetchAll(PDO::FETCH_ASSOC);
 }
 
 ?>

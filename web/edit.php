@@ -106,9 +106,9 @@ function process_action( $action )
 	    // delete an image
 
 	    // the ids are simply negated for easy recovery
-	    $sql = "UPDATE image SET book_id=-$book_id "
-		     . "WHERE n=$image_id AND book_id=$book_id";
-	    db_query( $sql );
+	    $sql = "UPDATE image SET book_id=? "
+		     . "WHERE n=? AND book_id=?";
+	    db_query( $sql, 0-$book_id, $image_id, $book_id );
 	}
 	else
 	{
@@ -315,11 +315,11 @@ function print_review( $book_id )
     echo "<p>\n<a href=\"http://ludd.net/books/review.php?import=$book_id\">Dangerously Review the book</a>\n<p>\n";
 
     // the books db doesn't have an index into these book ids
-    $sql = "SELECT review, reviewer FROM books.review WHERE library_id = $book_id";
+    $sql = "SELECT review, reviewer FROM books.review WHERE library_id=?";
 
-    $result = db_query( $sql );
+    $result = db_query($sql, $book_id);
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
     echo "<h1>Reader Review</h1>\n";
 
@@ -330,10 +330,10 @@ function print_review( $book_id )
 
 function print_images( $book_id )
 {
-    $sql = "SELECT n, attr FROM image WHERE book_id=$book_id";
-    $result = db_query( $sql );
+    $sql = "SELECT n, attr FROM image WHERE book_id=?";
+    $result = db_query( $sql, $book_id );
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
 	echo "<p><img src=\"image/$row[0]\" $row[1]><br>\n";
 	echo "[<a href=\"edit.php?b=$book_id&a=di&i=$row[0]\">",
@@ -355,15 +355,15 @@ function print_holdings( $book_id )
     "SELECT l.n, l.city, l.librarian, p.physical_id
 	FROM physical p LEFT JOIN location l
 			  ON p.location_id=l.n
-	WHERE p.book_id=$book_id";
-    $result = db_query( $sql );
+	WHERE p.book_id=?";
+    $result = db_query( $sql, $book_id );
 
-    $nrows = mysql_num_rows( $result );
+    $nrows = $result->rowCount();
     echo "$nrows cop" . ($nrows == 1 ? "y" : "ies") . " available in<p>\n";
 
     echo "<div id=physical>\n";
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
 	$n = $row[0];
 	$city = htmlspecialchars($row[1]);
@@ -395,13 +395,13 @@ function replace_book( $book_id, $new_id )
     // for the book the user was viewing.
     //
 
-    $sql = "UPDATE physical SET book_id=$new_id WHERE book_id=$book_id";
-    if ($debug) echo "$sql<br>\n";
-    db_query( $sql );
+    $sql = "UPDATE physical SET book_id=? WHERE book_id=?";
+    db_query( $sql, $new_id, $book_id );
 
-    $sql = "UPDATE image SET book_id=$new_id WHERE book_id=$book_id";
-    if ($debug) echo "$sql<br>\n";
-    db_query( $sql );
+    $sql = "UPDATE image SET book_id=? WHERE book_id=?";
+    db_query( $sql, $new_id, $book_id );
+
+    if ($debug) error_log("replacing book $book_id -> $new_id");
 }
 
 function delete_book_verified( $book_id )
@@ -413,8 +413,8 @@ function delete_book_verified( $book_id )
 
     if (isset($_POST['delete']))
     {
-	$sql = "DELETE FROM physical WHERE book_id=$book_id";
-	db_query( $sql );
+	$sql = "DELETE FROM physical WHERE book_id=?";
+	db_query( $sql, $book_id );
 	echo "<h2>Deleted book.</h2>\n";
     }
     else
@@ -431,7 +431,7 @@ function delete_book_verified( $book_id )
 
 function submit_data( $book_id )
 {
-    global $debug, $exec_path;
+    global $debug, $config;
     // Update the database with user-entered bibliographic information.
 
     $matches = array();
@@ -485,18 +485,18 @@ function submit_data( $book_id )
 
     $result = db_query( $sql );
 
-    exec( "$exec_path --standard $book_id" );
+    exec( "{$config['exec_path']} --standard $book_id" );
 }
 
 function get_book( $book_id )
 {
-    $sql = "SELECT * FROM book WHERE n=$book_id";
-    $result = db_query( $sql );
+    $sql = "SELECT * FROM book WHERE n=?";
+    $result = db_query( $sql, $book_id );
 
-    if ($row = mysql_fetch_assoc( $result ))
-	$book = $row;
-
-    return $book;
+    if ($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+	return $row;
+    }
 }
 
 function print_subjects( $book )
@@ -504,15 +504,15 @@ function print_subjects( $book )
     // gets and displays all MARC/LC subject data
 
     $sql = "SELECT * FROM subject, subject_link " .
-		"WHERE subject_id=n AND book_id=" . $book['n'];
-    $result = db_query( $sql );
-    if ($n = mysql_num_rows( $result ))
+		"WHERE subject_id=n AND book_id=?";
+    $result = db_query( $sql, $book['n'] );
+    if ($n = $result->rowCount())
     {
 	echo "<tr><td rowspan=$n valign=center>Subject</td>\n";
 	$first_row = 1;
     }
 
-    while ($row = mysql_fetch_assoc( $result ))
+    while ($row = $result->fetch())
     {
 	$fields = array( 'topic', 'subordinate', 'location', 'date',
 			 'title', 'affiliation', 'geographic',
@@ -531,9 +531,9 @@ function print_subjects( $book )
 function print_notes( $book )
 {
     $sql = "SELECT * FROM note_link LEFT JOIN note ON note.n=note_id " .
-		"WHERE book_id=" . $book['n'];
-    $result = db_query( $sql );
-    while ($row = mysql_fetch_assoc( $result ))
+		"WHERE book_id=?";
+    $result = db_query( $sql, $book['n'] );
+    while ($row = $result->fetch())
     {
 	echo "<tr><td>Notes</td><td colspan=3><font size=\"-1\">",
 	    $row['contents'], "</font></td></tr>\n";

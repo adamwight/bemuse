@@ -1,15 +1,18 @@
 <?
-mysql_connect( "localhost", "halfway", "barz on q" );
-mysql_select_db( "halfway" );
-mysql_set_charset("utf8");
 
-$exec_path = '/www/library/prog';
+global $config, $db, $debug;
+$config = yaml_parse_file('../config.yml');
+$db = new PDO(
+  $config['db']['driver'].
+  ":dbname=".$config['db']['dbname'].
+  ";host=".$config['db']['host'],
+  $config['db']['user'],
+  $config['db']['password']
+);
+$debug = $config['debug'];
+//mysql_set_charset("utf8");
+
 $specific_locations_only = 0;
-
-$max_favorites = 10;
-
-global $debug;
-if (!isset( $debug )) $debug = 0;
 
 if ($debug) error_reporting(E_ALL);
 
@@ -36,16 +39,13 @@ function tail_nav()
 
     foreach ($page_commands as $i)
     {
-	echo "<a href=\"" . $i["url"] . "\">" . $i["abbrev"] . "</a>";
+	echo "<a href=\"{$i['url']}\">{$i['abbrev']}</a>";
     }
 }
 
 function html_header($page_title = "")
 {
     global $style;
-    $style_h = '<style type="text/css" media="all">' .
-	'@import "base.css";' . $style . '</style>' .
-	'<link rel="stylesheet" type="text/css" media="print" href="print.css" />';
 
     if ($page_title)
 	$title_h = ": $page_title";
@@ -55,9 +55,11 @@ function html_header($page_title = "")
 ?>
 <html>
 <head>
-<title>The Halfway Library<?=$title_h?></title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<?=$style_h?>
+  <title>The Halfway Library<?=$title_h?></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet" type="text/css" media="all" href="base.css" />
+  <style type="text/css" media="all"><?=$style?></style>
+  <link rel="stylesheet" type="text/css" media="print" href="print.css" />
 </head>
 
 <body bgcolor=white text=black>
@@ -75,7 +77,7 @@ function html_footer()
 
 function print_locations_options( )
 {
-    global $debug, $location, $specific_locations_only;
+    global $db, $debug, $location, $specific_locations_only;
 
     echo "<select name=l>\n";
 
@@ -107,11 +109,12 @@ function print_locations_options( )
         'GROUP BY l.n ORDER BY city, librarian';
 
     $debug = 1;
-    $result = db_query( $sql );
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
 
     $cur_city = '';
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $stmt->fetch())
     {
 	$city = htmlspecialchars( $row[1] );
 	$librarian = htmlspecialchars( $row[2] );
@@ -194,17 +197,23 @@ function is_selected( $value, $if_matches )
 	return '';
 }
 
-function db_query( $sql )
+function db_query($sql/*, bound query varargs... */ )
 {
-    global $debug;
+    global $db, $debug;
 
-    $result = mysql_query( $sql );
-    if ($debug > 1)
-	error_log("SQL: $sql");
-    if (mysql_error())
-	error_log(mysql_error() . " query: " . $sql);
+    $args = func_get_args();
+    if ($debug > 1) {
+        error_log("SQL: $sql");
+        error_log(print_r($args, TRUE));
+    }
+    $stmt = $db->prepare($sql);
+    for ($i = 1; $i < count($args); $i++)
+    {
+        $stmt->bindParam($i, $args[$i]);
+    }
+    $stmt->execute();
 
-    return $result;
+    return $stmt;
 }
 
 function print_attach_image( $type, $id )

@@ -57,11 +57,11 @@ function get_session_location()
     }
 
     $sql = "SELECT city, librarian, contact, description, show_help "
-		. "FROM location WHERE n=$location";
+		. "FROM location WHERE n=?";
 
-    $result = db_query( $sql );
+    $result = db_query($sql, $location);
 
-    if ($row = mysql_fetch_row( $result ))
+    if ($row = $result->fetch())
     {
 	$city        = $row[0];
 	$librarian   = $row[1];

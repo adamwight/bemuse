@@ -20,7 +20,7 @@ html_header();
 
     echo "<p>\n<font size=\"-1\" face=serif>\n";
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
 	$type = htmlspecialchars( $row[1] );
 	$instrument = "<u><a href=\"edit_i.php?i=$row[0]\">"

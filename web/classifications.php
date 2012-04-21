@@ -152,8 +152,8 @@ abstract class headings_db extends headings_base
 
 	$result = db_query(
 	    "SELECT name FROM call_${call_type}_heading " .
-		"WHERE abbrev='$call_major'");
-	list ($heading) = mysql_fetch_row($result);
+		"WHERE abbrev=?", $call_major);
+	list ($heading) = $result->fetch(PDO::FETCH_NUM);
 	if (!$heading)
 	{
 	    global $call_type;

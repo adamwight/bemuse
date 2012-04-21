@@ -29,11 +29,11 @@ else
     //exit();
 //}
 
-$sql = "SELECT mime, length(data), data FROM image WHERE n=$image_id";
-$result = db_query( $sql );
+$sql = "SELECT mime, length(data), data FROM image WHERE n=?";
+$result = db_query( $sql, $image_id );
 
 //phpinfo(INFO_VARIABLES);
-if ($row = mysql_fetch_array( $result ))
+if ($row = $result->fetch())
 {
     //header( "Cache-Control: max-age=2592000" );
     header( "Content-Type: $row[0]" );

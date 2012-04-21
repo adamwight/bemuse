@@ -22,8 +22,8 @@ if (isset($_GET['i']))
     {
 	list ($image_id) = sscanf( $_GET['img'], "%d" );
 
-	$sql = "UPDATE image SET instrument_id=-$instrument_id WHERE n=$image_id AND instrument_id=$instrument_id";
-	db_query( $sql );
+	$sql = "UPDATE image SET instrument_id=? WHERE n=? AND instrument_id=?";
+	db_query( $sql, 0-$instrument_id, $image_id, $instrument_id );
     }
 
     $instrument = get_instrument( $instrument_id );
@@ -33,8 +33,8 @@ if ($action == 'd')
 {
     if ($_POST['submit'] == 'Delete')
     {
-	$sql = "DELETE FROM instrument WHERE n=$instrument_id";
-	db_query( $sql );
+	$sql = "DELETE FROM instrument WHERE n=?";
+	db_query( $sql, $instrument_id );
 	echo "<h2>Deleted instrument.</h2>\n";
     }
     else
@@ -130,10 +130,10 @@ History, comments, etc.<br>
 
 function print_images( $instrument_id )
 {
-    $sql = "SELECT n, attr FROM image WHERE instrument_id=$instrument_id";
-    $result = db_query( $sql );
+    $sql = "SELECT n, attr FROM image WHERE instrument_id=?";
+    $result = db_query($sql, $instrument_id);
 
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
 	echo "<p><img src=\"image/$row[0]\" $row[1]><br>\n";
 	echo "[<a href=\"edit_i.php?i=$instrument_id&a=di&img=$row[0]\">",
@@ -148,27 +148,31 @@ function submit_data( $instrument_id )
     $form_source = 'post';
 
     $sql = "UPDATE instrument SET"
-	      . " year='" . massage('year')
-	    . "', brand='" . massage('brand')
-	    . "', comment='" . massage('comment')
-	    . "', reference=" . ($_POST['reference'] == 'on')
-	    . " WHERE n=$instrument_id";
+	      . " year=?"
+	    . "', brand=?"
+	    . "', comment=?"
+	    . "', reference=?"
+	    . " WHERE n=?";
 
-    $result = db_query( $sql );
+    $result = db_query($sql,
+        massage('year'),
+        massage('brand'),
+        massage('comment'),
+        $_POST['reference'] == 'on',
+        $instrument_id
+    );
 }
 
 function get_instrument( $instrument_id )
 {
-    $sql = "SELECT * FROM instrument WHERE n=$instrument_id";
+    $sql = "SELECT * FROM instrument WHERE n=?";
 
-    $result = db_query( $sql );
+    $result = db_query( $sql, $instrument_id );
 
-    if ($row = mysql_fetch_assoc( $result ))
+    if ($row = $result->fetch(PDO::FETCH_ASSOC))
     {
-	$instrument = $row;
+        return $row;
     }
-
-    return $instrument;
 }
 
 function print_holdings( $instrument_id )
@@ -177,11 +181,10 @@ function print_holdings( $instrument_id )
     "SELECT location.n, location.city, location.librarian
 	FROM instrument LEFT JOIN location
 			  ON instrument.location_id=location.n
-	WHERE instrument.n=$instrument_id";
-    $result = db_query( $sql );
+	WHERE instrument.n=?";
+    $result = db_query( $sql, $instrument_id );
 
-    $nrows = mysql_num_rows( $result );
-    while ($row = mysql_fetch_row( $result ))
+    while ($row = $result->fetch())
     {
 	echo "<a href=\"browse.php?l=$row[0]\">",
 		htmlspecialchars( $row[1] ),

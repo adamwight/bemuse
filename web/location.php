@@ -105,13 +105,12 @@ function parse_location($ref = null)
 
     if ($full_manual_data)
     {
-	$sql = "INSERT INTO location SET city      = '$city', "
-				      . "librarian = '$librarian', "
-				      . "contact   = '$contact'";
-	mysql_query( $sql );
-	echo mysql_error();
+	$sql = "INSERT INTO location SET city      = ?, "
+				      . "librarian = ?, "
+				      . "contact   = ?";
+	db_query( $sql, $city, $librarian, $contact );
 
-	$location_id = mysql_insert_id();
+	$location_id = PDO::lastInsertId();
 	$location = $location_id;
     }
     else

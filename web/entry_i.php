@@ -73,11 +73,20 @@ function process_input_data()
     $comment   = trim( $_POST['comment'] );
 
     $sql = "INSERT INTO instrument VALUES " .
-		"(null, $location, $location, $reference, null, " .
-		"'$type', '$brand', '$year', '$comment')";
-    if (db_query( $sql ))
+		"(null, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $result = db_query( $sql,
+        $location,
+        $location,
+        $reference,
+        null,
+        $type,
+        $brand,
+        $year,
+        $comment
+    );
+    if ($result->rowCount())
     {
-	$id = mysql_insert_id();
+	$id = PDO::lastInsertId();
 	?>Listed a <a href="edit_i.php?i=<?=$id?>"><?=$type?></a>.<?
     }
     else

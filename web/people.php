@@ -39,7 +39,7 @@ function print_locations()
 	    "WHERE p.publicity > 0 GROUP BY city";
     $result = db_query( $sql );
 
-    while ($row = mysql_fetch_row($result))
+    while ($row = $result->fetch())
     {
 	print_city_books( $row[0], $row[1] );
     }
@@ -56,7 +56,7 @@ function print_collections()
     	. "GROUP BY location_id ORDER BY l.librarian, l.city";
     $result = db_query( $sql );
 
-    while ($row = mysql_fetch_row($result))
+    while ($row = $result->fetch())
     {
 	$library = new librarian($row[0]);
 	?><div style="margin-top: 1em;"><?
@@ -79,12 +79,12 @@ function print_city_books( $city, $n_books )
     $sql = "SELECT l.librarian, l.description, l.n, COUNT(*) as nobooks "
 	. "FROM physical p "
 		. "JOIN location l ON l.n=p.location_id "
-    	. "WHERE l.city='" . addslashes($city) . "' AND publicity > 0 "
+    	. "WHERE l.city=? AND publicity > 0 "
     	. "GROUP BY l.librarian";
-    $result = db_query( $sql );
+    $result = db_query($sql, $city);
 
     $city = htmlspecialchars($city);
-    $n_people = mysql_num_rows( $result );
+    $n_people = $result->rowCount();
     $n_per = round($n_books / $n_people, 1);
 
     // city
@@ -96,7 +96,7 @@ function print_city_books( $city, $n_books )
     echo "<div style=\"margin: 0px 0px 1em .25in;\">\n";
 
     // librarians
-    while ($row = mysql_fetch_assoc( $result ))
+    while ($row = $result->fetch(PDO::FETCH_ASSOC))
     {
 	$librarian = htmlspecialchars( $row['librarian'] );
 

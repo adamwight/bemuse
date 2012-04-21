@@ -64,13 +64,12 @@ $sql = "SELECT book.n, book.title_full, book.author, book.responsible, "
 	  . "AND informed "
 	  . "ORDER BY call_lc, title_sort, location.city ";
 
-$result = mysql_query( $sql );
-echo mysql_error();
+$result = db_query( $sql );
 
 $even_row = 0;
 $last_topic = NULL;
 
-while ($row = mysql_fetch_row( $result ))
+while ($row = $result->fetch())
 {
     $matches = array();
     if (preg_match( "/^([a-zA-Z]+)/", $row[4], $matches ))

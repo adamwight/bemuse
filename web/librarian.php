@@ -15,10 +15,10 @@ class librarian
         if (!isset($this->db_location))
         {
             $sql = "SELECT city, librarian, contact, abbrev, description " .
-                "FROM location WHERE n=" . $this->location_id;
-            $result = db_query($sql);
+                "FROM location WHERE n=?";
+            $result = db_query($sql, $this->location_id);
 
-            $this->db_location = mysql_fetch_assoc($result);
+            $this->db_location = $result->fetch(PDO::FETCH_ASSOC);
         }
 
         return ($this->db_location);
@@ -116,14 +116,14 @@ class librarian
 
     function print_location_images()
     {
-	$sql = "SELECT n, attr FROM image WHERE location_id=" . $this->get_location_id();
+	$sql = "SELECT n, attr FROM image WHERE location_id=?";
 
-	$result = db_query( $sql );
+	$result = db_query($sql, $this->get_location_id());
 
-	while ($row = mysql_fetch_row( $result ))
+	while ($row = $result->fetch())
 	{
 	    echo "<p><img src=\"image/$row[0]\" $row[1]>\n";
-	    echo "<br>[<a href=\"browse.php?l=" . $this->location_id . "&a=di&i=$row[0]\">";
+	    echo "<br>[<a href=\"browse.php?l={$this->location_id}&a=di&i=$row[0]\">";
 	    echo "delete image</a>]\n";
 	}
     }
@@ -154,9 +154,9 @@ class librarian
 	{
 	    $sql = "SELECT GROUP_CONCAT(n SEPARATOR ',') "
                     . "FROM location "
-                    . "WHERE city='" . addslashes( $this->raw_location ) . "'";
-	    $result = db_query( $sql );
-	    list($ids) = mysql_fetch_row( $result );
+                    . "WHERE city=?";
+	    $result = db_query($sql, $this->raw_location);
+	    list($ids) = $result->fetch(PDO::FETCH_NUM);
 
 	    $this->filter = "location_id in ($ids)";
 	    $this->location_array = explode(',', $ids);
@@ -186,9 +186,9 @@ class librarian
 
 	echo "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
 
-	$sql = "SELECT COUNT(*) FROM physical WHERE " . $this->get_where();
+	$sql = "SELECT COUNT(*) FROM physical WHERE ".$this->get_where();
 	$result = db_query( $sql );
-	$row = mysql_fetch_row( $result );
+	$row = $result->fetch();
 	$total = $row[0];
 
 	/*
@@ -214,7 +214,7 @@ class librarian
 	{
 	    $sql = "SELECT COUNT(*) FROM instrument WHERE " . $this->get_where();
 	    $result = db_query( $sql );
-	    $row = mysql_fetch_row( $result );
+	    $row = $result->fetch();
 	    $total = $row[0];
 
 	    if ($total == 1) echo " and 1 instrument";

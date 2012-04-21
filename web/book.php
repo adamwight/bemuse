@@ -124,12 +124,12 @@ class book_printer
 
     function print_favorite_books($where, $invert_cutpoint = 0)
     {
-        global $max_favorites, $order;
+        global $config, $order;
         $this->order = "publicity DESC, n DESC";
         if ($invert_cutpoint == 0)
-            $this->print_books("$where AND (publicity > 1)", "LIMIT $max_favorites");
+            $this->print_books("$where AND (publicity > 1)", "LIMIT {$config['max_favorites']}");
         else
-            $this->print_books("$where AND (publicity > 1)", "LIMIT 16777216 OFFSET $max_favorites");
+            $this->print_books("$where AND (publicity > 1)", "LIMIT 16777216 OFFSET {$config['max_favorites']}");
         //XXX fuckers
 
         $this->order = $order; //restore
@@ -198,7 +198,7 @@ class book_printer
 	$result = db_query( $sql );
 
         $out = array();
-	while ($book = mysql_fetch_assoc($result))
+	while ($book = $result->fetch(PDO::FETCH_ASSOC))
 	{
             //XXX streaming print
 	    $this->print_book(new physical($book, $book['location_id']));
