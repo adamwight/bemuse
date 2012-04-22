@@ -32,30 +32,27 @@ $data = fread( $f, filesize( $tmpfname ) );
 fclose( $f );
 unlink( $tmpfname );
 
-$escaped = mysql_real_escape_string( $data );
-
 if ($book_id)
 {
-    $sql = "INSERT INTO image SET book_id=$book_id, "
-	 . "mime='" . $size['mime'] . "', attr='$size[3]', "
-	 . "data='$escaped'";
-    db_query( $sql );
+    $sql = "INSERT INTO image SET book_id=?, "
+	 . "mime=?, attr=?, data=?";
+    db_query($sql,
+        $book_id,
+        $size['mime'],
+        $size[3],
+        $data
+    );
     header( "Location: edit.php?b=$book_id" );
 }
 elseif ($location_id)
 {
-    $sql = "INSERT INTO image SET location_id=$location_id, "
-	 . "mime='" . $size['mime'] . "', attr='$size[3]', "
-	 . "data='$escaped'";
-    db_query( $sql );
+    $sql = "INSERT INTO image SET location_id=?, "
+	 . "mime=?, attr=?, data=?";
+    db_query( $sql, $location_id, $size['mime'], $size[3], $data );
     header( "Location: browse.php?l=$location_id" );
 }
 elseif ($instrument_id)
 {
-    $sql = "INSERT INTO image SET instrument_id=$instrument_id, "
-	 . "mime='" . $size['mime'] . "', attr='$size[3]', "
-	 . "data='$escaped'";
-    db_query( $sql );
     header( "Location: edit_i.php?i=$instrument_id" ); //XXX
 }
 ?>

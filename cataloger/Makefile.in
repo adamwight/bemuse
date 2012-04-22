@@ -23,7 +23,7 @@ SRCS = \
 OBJS = $(SRCS:.cc=.o)
 DEPENDS = .depends
 #CXXFLAGS = -I/usr/local/include -O2 -pipe
-CXXFLAGS = @CXXFLAGS@ @YAZPPINC@ -Wall -shared
+CXXFLAGS = @CXXFLAGS@ @YAZPPINC@ -Wall -shared -fPIC
 LIBS = `mysql_config --libs_r` @YAZPPLIB@ -lpthread -ldl
 CATALOGER_LIB=libcataloger.so
 
@@ -37,7 +37,7 @@ clean:
 build: $(OBJS) $(CATALOGER_LIB)
 
 $(CATALOGER_LIB): $(OBJS)
-	g++ -o $(CATALOGER_LIB) -Wl -shared $(LIBS) $(SRCS:.cc=.o)
+	g++ -o $(CATALOGER_LIB) -Wl -shared -fPIC $(LIBS) $(SRCS:.cc=.o)
 
 install: build
 #TODO

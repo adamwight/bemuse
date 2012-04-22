@@ -16,8 +16,8 @@ CATALOGER=../cataloger/
 CATALOGER_LIB=-L $(CATALOGER) -lcataloger
 DEPENDS = .depends
 #CXXFLAGS = -I/usr/local/include -O2 -pipe
-CXXFLAGS = @CXXFLAGS@ -shared -I$(CATALOGER) -I.
-LIBS = `mysql_config --libs_r` -L/usr/local/lib -lyazpp -lyaz -lzoompp -lpthread -ldl $(CATALOGER_LIB)
+CXXFLAGS = @CXXFLAGS@ -shared -fPIC -I$(CATALOGER) -I. 
+LIBS = $(CATALOGER_LIB) `mysql_config --libs_r` @YAZPPLIB@ -ldl
 PROG=prog
 
 DEST = @prefix@
@@ -34,16 +34,16 @@ depend:
 	makedepend -f$(DEPENDS) -I/usr/local/include -I/usr/include/g++ -I/usr/include/c++/3.3 $(SRCS)
 
 prog: $(PROG_OBJS)
-	g++ -g -o $@ $(LIBS) $(PROG_OBJS)
+	g++ -g -o $@ $(PROG_OBJS) $(LIBS) -fPIC
 
 test: $(TEST_OBJS)
-	g++ -g -o $@ $(LIBS) $(TEST_OBJS)
+	g++ -g -o $@ $(TEST_OBJS) $(LIBS) -fPIC
 
 debarcode: $(DEBARCODE_OBJS)
-	g++ -g -o $@ $(LIBS) $(DEBARCODE_OBJS)
+	g++ -g -o $@ $(DEBARCODE_OBJS) $(LIBS) -fPIC
 
 char_conv: $(CHAR_CONV_OBJS)
-	g++ -g -o $@ $(LIBS) $(CHAR_CONV_OBJS)
+	g++ -g -o $@ $(CHAR_CONV_OBJS) $(LIBS) -fPIC
 
 install: build
 	install -m a+x -s $(PROG) $(DEST)

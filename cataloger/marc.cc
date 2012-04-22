@@ -407,7 +407,7 @@ void marc::parse_852( const char* s )
     }
 }
 
-void marc::strip_initials( string& s, char* chars )
+void marc::strip_initials( string& s, const char* chars )
 {
     const char* p = s.c_str();
 
@@ -416,7 +416,7 @@ void marc::strip_initials( string& s, char* chars )
     if (p > s) s.erase( 0, (int)(p - s.c_str()) );
 }
 
-void marc::strip_finals( string& s, char* chars )
+void marc::strip_finals( string& s, const char* chars )
 {
     int len = s.length();
     if (!len) return;

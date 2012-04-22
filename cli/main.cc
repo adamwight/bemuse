@@ -1,7 +1,3 @@
-/*
- * $Id: main.cc,v 1.33 2006/04/04 03:00:12 adamw Exp $
- */
-
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>

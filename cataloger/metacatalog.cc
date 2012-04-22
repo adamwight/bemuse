@@ -88,8 +88,8 @@ void metacatalog::refine(book& b, const vector<unsigned long>& r)
     vector<book> hits = result_store::get_results(r);
     //TODO
     if (hits.size()) {
-	book s = hits[0];
-	b = s;
+        b.db_id = hits[0].db_id;
+        b.db_get();
     }
 }
 

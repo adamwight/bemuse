@@ -11,17 +11,18 @@
 class query : public db_entity
 {
 public:
-    query(const class book& src);
+    query(const class book src);
     query(unsigned long id);
+    query(const query& q);
     virtual ~query();
 
-    book get_book();
+    book* get_book();
 
 protected:
     void commit();
     int db_get();
 
-    book source_book;
+    book* source_book;
     int free_book;
 };
 

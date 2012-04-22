@@ -21,3 +21,41 @@ default_call_system: lc
 #divide_topics
 #highlight_accessible
 #minimum_publicity
+
+default_z_servers:
+    melvyl.cdlib.org:
+        port: 210
+        dbname: CDL90
+        enabled: true
+    z3950.loc.gov:
+        port: 7090
+        dbname: Voyager
+        enabled: true
+    catalog.library.cornell.edu:
+        port: 7090
+        dbname: VOYAGER
+        enabled: true
+    bobcat.nyu.edu:
+        port: 210
+        dbname: advance
+        enabled: false
+    library.ox.ac.uk:
+        port: 210
+        dbname: advance
+        enabled: false
+    prodorbis.library.yale.edu:
+        port: 7090
+        dbname: voyager
+        enabled: false
+    www.loc.gov:
+        port: NULL
+        dbname: NULL
+        enabled: false
+    www.amazon.com:
+        port: NULL
+        dbname: NULL
+        enabled: false
+    Z3950cat.bl.uk:
+        port: 9909
+        dbname: BLAC
+        enabled: false

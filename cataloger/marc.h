@@ -54,8 +54,8 @@ protected:
     void parse_852( const char* s );
 
     void get_subfields( const char* s, subfield_spec* sub );
-    static void strip_initials( string& s, char* chars );
-    static void strip_finals( string& s, char* chars );
+    static void strip_initials( string& s, const char* chars );
+    static void strip_finals( string& s, const char* chars );
 
     void charset_convert(const string& src, string& dst);
 };

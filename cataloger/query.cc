@@ -8,16 +8,22 @@
 #include "book.h"
 #include "globals.h"
 
-query::query(const book& src)
+query::query(const book src)
 {
     // XXX and the book should be db copied? one src, one as-was?
-    source_book = src;
+    source_book = new book(src);
     commit();
 }
 
 query::query(unsigned long id)
 {
     db_id = id;
+    db_get();
+}
+
+query::query(const query& q)
+{
+    db_id = q.db_id;
     db_get();
 }
 
@@ -30,7 +36,7 @@ void query::commit()
 {
     char sql[64];
     snprintf(sql, 64, "INSERT INTO query SET source_book_id=%lu",
-	source_book.get_id());
+	source_book->get_id());
     db->execute(sql);
 
     db_id = db->last_insert_id();
@@ -49,7 +55,7 @@ int query::db_get()
     {
 	if (row[0])
 	{
-	    source_book = book(strtoul(row[0], NULL, 10));
+	    source_book = new book(strtoul(row[0], NULL, 10));
 	    // XXX db_get?
 	    return 1;
 	}
@@ -57,7 +63,7 @@ int query::db_get()
     return 0;
 }
 
-book query::get_book()
+book* query::get_book()
 {
     return source_book;
 }

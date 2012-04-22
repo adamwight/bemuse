@@ -30,8 +30,8 @@ book::~book()
     if (subject_head) delete subject_head;
     if (note_head)    delete note_head;
     // XXX we only sometimes own this data
-    //if (source)	      delete source;
-    //if (source_query) delete source_query;
+    if (src)	      delete src;
+    if (source_query) delete source_query;
 }
 
 int book::db_get()
@@ -75,8 +75,10 @@ int book::db_get()
 	other_phys      = (row[18] ? row[18] : "");
 	language        = (row[19] ? row[19] : "");
 
+        if (src)	      delete src;
 	src		= (row[20] ?
 	    new source(strtoul(row[20], NULL, 10)) : NULL);
+        if (source_query) delete source_query;
 	source_query	= (row[21] ?
 	    new query(strtoul(row[21], NULL, 10)) : NULL);
 
@@ -339,10 +341,10 @@ void book::refine( book& m )
 
     if (!m.language.empty()) language = m.language;
 
-    if (m.src) src = m.src;
+    if (m.src) src = new source(*m.src);
 
     if (m.source_query && !source_query)
-	source_query = m.source_query;
+	source_query = new query(*m.source_query);
 
     if (m.note_head)
     {

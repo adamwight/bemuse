@@ -1,12 +1,12 @@
-bemuse - Book Entropy Muse
+== bemuse - Book Entropy Muse ==
 
-N.B. the heads need to be merged
+pear install phpunit/PHPUnit yaml
 
-prog
-    the application that does all the work
+cataloger/
+    Compiled, server application to lookup in parallel from Z.39 and other sources.
 
 web/
     book.php
-	the book and book_printer classes.
+	book and book_printer classes.
     edit.php
 	edit a book

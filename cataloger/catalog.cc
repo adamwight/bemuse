@@ -67,6 +67,6 @@ string catalog::result_string() const
 int catalog::do_query(query* q)
 {
     db_query = q;
-    book tmp = q->get_book();
-    return get_info(tmp);
+    book* tmp = q->get_book();
+    return get_info(*tmp);
 }

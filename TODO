@@ -1,3 +1,8 @@
+WSGI
+
+-fPIC
+makefiles.  install libcataloger to /usr/local/lib
+
 export: json, z39.50, rss etc feed per query
 text views of library: people/all loc <p>
 better lookup failures

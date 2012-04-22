@@ -13,6 +13,7 @@ class source : public db_entity
 {
 public:
     source(unsigned long id) : db_entity(id) {}
+    source(const source& src) : db_entity(src.db_id) {}
 
     int is_defined() { return db_id != 0; }
     virtual string get_name();

@@ -81,7 +81,7 @@ print_footer();
 
 function process_action( $action )
 {
-    global $book_id, $exec_path, $books, $debug;
+    global $book_id, $config, $books, $debug;
 
     if ($action == 'r')
     {
@@ -132,7 +132,7 @@ function process_action( $action )
 	//
 
 	// BACKGROUND THE FUCKER once query_id is gotten
-	$cmd = "$exec_path --lookup --book-id $book_id --everywhere";
+	$cmd = "{$config['exec_path']} --lookup --book-id $book_id --everywhere";
 	if ($debug) error_log($cmd);
 	$f = popen("$cmd", "r");
 
@@ -434,56 +434,74 @@ function submit_data( $book_id )
     global $debug, $config;
     // Update the database with user-entered bibliographic information.
 
-    $matches = array();
+    $params = array(
+        'book_id' => $book_id,
+        'author' => massage('author'),
+        'call_h' => massage('author'),
+        'call_dewey' => massage('author'),
+        'call_lc' => massage('author'),
+        'lccn' => massage('author'),
+        'isbn' => massage('author'),
+    );
 
+    $matches = array();
     if (preg_match( "/^(.+) *(\.[A-Z].*)$/",
 		    $_POST['call_lc'],
 		    $matches ))
     {
-	$lc_class_number = mysql_real_escape_string($matches[1]);
-	$lc_item_number = mysql_real_escape_string($matches[2]);
+	$params['lc_class_number'] = $matches[1];
+	$params['lc_item_number'] = $matches[2];
     }
     else
     {
-	$lc_class_number = massage('call_lc');
+	$params['lc_class_number'] = massage('call_lc');
+	$params['lc_item_number'] = '';
     }
 
     // Crudely parse into title / subtitle;
     if (preg_match( "/^(.+?) *([:;] *)(.*)$/", $_POST['title'], $matches ))
     {
-	$title = mysql_real_escape_string($matches[1]);
-	$sep = mysql_real_escape_string($matches[2]);
-	$subtitle = mysql_real_escape_string($matches[3]);
+	$params['title'] = $matches[1];
+	$sep = $matches[2];
+	$params['subtitle'] = $matches[3];
     }
     else
     {
-	$title = massage('title');
+	$params['title'] = massage('title');
 	$sep = '';
-	$subtitle = '';
+	$params['subtitle'] = '';
     }
+    $params['title_full'] = "{$params['title']}{$sep}{$params['subtitle']}";
 
-    $sql = "UPDATE book SET modified=1, title='$title"
-	    . "', subtitle='$subtitle"
-	    . "', title_full='$title$sep$subtitle"
-	    . "', author='" . massage('author')
-	    . "', lc_class_number='$lc_class_number"
-	    . "', lc_item_number='$lc_item_number"
-	    . "', call_h='" . massage('call_h')
-	    . "', call_dewey='" . massage('call_dewey')
-	    . "', call_lc='" . massage('call_lc')
-	    . "', lccn='" . massage('lccn')
-	    . "', isbn='" . massage('isbn');
-    if ($debug) echo "$sql<br>\n";
+    $sql = <<<EOS
+        UPDATE book SET modified=1, title=:title
+	    , subtitle=:subtitle
+	    , title_full=:title_full
+	    , author=:author
+	    , lc_class_number=:lc_class_number
+	    , lc_item_number=:lc_item_number
+	    , call_h=:call_h
+	    , call_dewey=:call_dewey
+	    , call_lc=:call_lc
+	    , lccn=:lccn
+	    , isbn=:isbn
+EOS;
     if (isset($_POST['ve']))
     {
-	$sql .= "', responsible='" . massage('responsible')
-	      . "', pub_place='" . massage('pub_place')
-	      . "', pub_name='" . massage('pub_name')
-	      . "', pub_dates='" . massage('pub_dates');
+	$sql .= <<<EOS
+            , responsible=:responsible
+	    , pub_place=:pub_place
+	    , pub_name=:pub_name
+	    , pub_dates=:pub_dates
+EOS;
+        $params['responsible'] = massage('responsible');
+        $params['pub_place'] = massage('pub_place');
+        $params['pub_name'] = massage('pub_name');
+        $params['pub_dates'] = massage('pub_dates');
     }
-    $sql .= "' WHERE n=$book_id";
+    $sql .= "' WHERE n=:book_id";
 
-    $result = db_query( $sql );
+    $result = db_query( $sql, $params );
 
     exec( "{$config['exec_path']} --standard $book_id" );
 }

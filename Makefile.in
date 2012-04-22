@@ -1,20 +1,21 @@
 # @configure_input@
 DEST = @prefix@
 
-all: build install test
+all: install
+#test
 
-clean build:
+clean build install::
 	$(MAKE) -C cataloger $@
 	$(MAKE) -C cli $@
-	[ -f desktop/Makefile ] && $(MAKE) -C desktop $@
+#	[ -f desktop/Makefile ] && $(MAKE) -C desktop $@
 
 #TODO
-install: build
+install:: build
 	$(MAKE) -C cli $@
-	mkdir -p $(DEST)/doc/
-	chmod u+w $(DEST)/doc/
-	cp -R doc/* $(DEST)/doc/
-	chmod a-w $(DEST)/doc/
+	mkdir -p $(DEST)/web/doc/
+	chmod u+w $(DEST)/web/doc/
+	cp -R doc/* $(DEST)/web/doc/
+	chmod a-w $(DEST)/web/doc/
 
 distclean: clean
 	rm -f config.* Makefile */Makefile

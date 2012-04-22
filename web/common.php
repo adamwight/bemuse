@@ -207,9 +207,19 @@ function db_query($sql/*, bound query varargs... */ )
         error_log(print_r($args, TRUE));
     }
     $stmt = $db->prepare($sql);
-    for ($i = 1; $i < count($args); $i++)
+    if (count($args) > 1 && is_array($args[1]))
     {
-        $stmt->bindParam($i, $args[$i]);
+        foreach ($args[1] as $key => $value)
+        {
+            $stmt->bindParam(':'.$key, $value);
+        }
+    }
+    else
+    {
+      for ($i = 1; $i < count($args); $i++)
+      {
+          $stmt->bindParam($i, $args[$i]);
+      }
     }
     $stmt->execute();
 
@@ -290,7 +300,7 @@ function order_key_to_column($order)
 function massage($var_name)
 {
     $s = get_form_var($var_name);
-    return mysql_real_escape_string(htmlspecialchars(trim($s)));
+    return htmlspecialchars(trim($s));
 }
 
 function get_digit($var_name)
